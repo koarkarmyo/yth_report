@@ -8,7 +8,8 @@
 reportsAddon/*
 
 # 4. `reportsAddon` ထဲက `padetha_reports` ကိုတော့ မ ignore ပါနဲ့
-!reportsAddon/padetha_reports/
+#    (နောက်မှာ slash မပါတော့တာကို သတိပြုပါ)
+!reportsAddon/padetha_reports
 
 # 5. `.gitignore` ဖိုင်ကိုယ်တိုင်ကိုလည်း မ ignore ပါနဲ့
 !.gitignore
