@@ -1,0 +1,33 @@
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment folders
+.venv/
+venv/
+odoo18-venv/
+
+# Log files
+*.log
+
+# Ignore the main Odoo source code and standard addons
+# We only want to track our custom modules
+odoo/
+addons/
+enterprise-addons/
+
+# Ignore other Odoo scaffold files and folders
+data/
+debian/
+doc/
+setup/
+odoo-bin
+CONTRIBUTING.md
+COPYRIGHT
+LICENSE
+MANIFEST.in
+requirements.txt
+setup.cfg
+setup.py
+myAddon/
