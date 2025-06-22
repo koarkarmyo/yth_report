@@ -1,33 +1,14 @@
-# Python cache and compiled files
-__pycache__/
-*.pyc
-*.pyo
+# 1. အရာအားလုံးကို Ignore လုပ်ပါ
+*
 
-# Virtual environment folders
-.venv/
-venv/
-odoo18-venv/
+# 2. ဒါပေမယ့် `reportsAddon` folder ကိုတော့ မ ignore ပါနဲ့ (folder ထဲဝင်ကြည့်လို့ရအောင်)
+!reportsAddon/
 
-# Log files
-*.log
+# 3. `reportsAddon` ထဲက အရာအားလုံးကိုတော့ ပြန် Ignore လုပ်ပါ
+reportsAddon/*
 
-# Ignore the main Odoo source code and standard addons
-# We only want to track our custom modules
-odoo/
-addons/
-enterprise-addons/
+# 4. `reportsAddon` ထဲက `padetha_reports` ကိုတော့ မ ignore ပါနဲ့
+!reportsAddon/padetha_reports/
 
-# Ignore other Odoo scaffold files and folders
-data/
-debian/
-doc/
-setup/
-odoo-bin
-CONTRIBUTING.md
-COPYRIGHT
-LICENSE
-MANIFEST.in
-requirements.txt
-setup.cfg
-setup.py
-myAddon/
+# 5. `.gitignore` ဖိုင်ကိုယ်တိုင်ကိုလည်း မ ignore ပါနဲ့
+!.gitignore
