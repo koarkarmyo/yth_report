@@ -1,1 +1,1 @@
-# hello
+from . import sale_a5_voucher_report
