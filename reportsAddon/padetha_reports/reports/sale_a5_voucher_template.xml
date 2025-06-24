@@ -41,8 +41,8 @@
                         <td style="width:30%; text-align:right; vertical-align:top;">
                             <h4>
                                 <span class="badge" style="background-color:black; color:white;">
-                                    <b t-if="copy_label == 1">Customer Copy</b>
-                                    <b t-if="copy_label == 2">Office Copy</b>
+                                    <b t-if="copy_label == 1">Customer</b>
+                                    <b t-if="copy_label == 2">Office</b>
                                 </span>
                             </h4>
                         </td>
