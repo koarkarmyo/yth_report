@@ -11,11 +11,12 @@
                 - Calculate the total number of pages required based on a custom Python method.
                 - Initialize indexes for manual pagination.
             -->
-            <t t-set="normal_lines" t-value="doc.order_line.filtered(lambda line: line.product_uom_qty > 0).sorted(key=lambda line: line.product_id.name)"/>
-<!--            <t t-set="normal_lines" t-value="lines.filtered(lambda line: line.sale_type == 'sale')"/>-->
-<!--            <t t-set="foc_lines" t-value="lines.filtered(lambda line: line.sale_type == 'foc')"/>-->
-<!--            <t t-set="coupon_lines" t-value="lines.filtered(lambda line: line.sale_type == 'cupon')"/>-->
-<!--            <t t-set="disc_lines" t-value="doc.order_line.filtered(lambda line: line.sale_type == 'disc')"/>-->
+            <t t-set="normal_lines"
+               t-value="doc.order_line.filtered(lambda line: line.product_uom_qty > 0).sorted(key=lambda line: line.product_id.name)"/>
+            <!--            <t t-set="normal_lines" t-value="lines.filtered(lambda line: line.sale_type == 'sale')"/>-->
+            <!--            <t t-set="foc_lines" t-value="lines.filtered(lambda line: line.sale_type == 'foc')"/>-->
+            <!--            <t t-set="coupon_lines" t-value="lines.filtered(lambda line: line.sale_type == 'cupon')"/>-->
+            <!--            <t t-set="disc_lines" t-value="doc.order_line.filtered(lambda line: line.sale_type == 'disc')"/>-->
 
             <t t-set="total_page" t-value="doc.get_current_page(normal_lines)"/>
             <t t-set="line_no" t-value="1"/>
@@ -29,7 +30,8 @@
                 <table class="table table-borderless" style="width:100%;">
                     <tr>
                         <td style="width:30%;">
-                            <strong class="p-0 m-0">Order Date:</strong><br/>
+                            <strong class="p-0 m-0">Order Date:</strong>
+                            <br/>
                             <span t-esc="context_timestamp(doc.date_order).strftime('%d-%m-%Y %H:%M:%S')"/>
                         </td>
                         <td style="width:40%; text-align:center;">
@@ -57,18 +59,18 @@
                         </td>
                         <td style="width:20%; text-align:center;">
                             <!-- The 'picking' variable is passed from the main template -->
-<!--                            <img t-if="picking" t-att-src="'/report/barcode/?barcode_type=QR&value=%s&width=70&height=70' % (picking.name)" style="width:70px; height:70px;"/>-->
+                            <!--                            <img t-if="picking" t-att-src="'/report/barcode/?barcode_type=QR&value=%s&width=70&height=70' % (picking.name)" style="width:70px; height:70px;"/>-->
                         </td>
                         <td style="width:40%; vertical-align:top; text-align:left;">
                             <span t-field="doc.partner_id.name"/>,
-<!--                            <span t-field="doc.partner_id.name2"/>-->
+                            <!--                            <span t-field="doc.partner_id.name2"/>-->
                             <br/>
                             <span t-field="doc.partner_id.phone"/>
                             <br/>
                             <span t-field="doc.partner_id.street"/>
                             <br/>
-<!--                            <span t-field="doc.partner_id.ward_id.name"/>,-->
-<!--                            <span t-field="doc.partner_id.township_id.name"/>-->
+                            <!--                            <span t-field="doc.partner_id.ward_id.name"/>,-->
+                            <!--                            <span t-field="doc.partner_id.township_id.name"/>-->
                         </td>
                     </tr>
                 </table>
@@ -76,25 +78,35 @@
                 <!-- Sales and Delivery Info -->
                 <table class="table table-borderless mb-2" style="width:100%">
                     <tr>
-                        <td style="width:17%;"><strong>Salesman</strong></td>
-<!--                        <td style="width:33%;">: <span t-field="doc.sale_person"/></td>-->
+                        <td style="width:17%;">
+                            <strong>Salesman</strong>
+                        </td>
+                        <!--                        <td style="width:33%;">: <span t-field="doc.sale_person"/></td>-->
                         <td style="width:33%;">: Ye Htet Aung</td>
-                        <td style="width:17%;"><strong>Vehicle</strong></td>
-<!--                        <td style="width:33%;">: <span t-field="doc.delivery_location"/></td>-->
+                        <td style="width:17%;">
+                            <strong>Vehicle</strong>
+                        </td>
+                        <!--                        <td style="width:33%;">: <span t-field="doc.delivery_location"/></td>-->
                         <td style="width:33%;">: WH/2343</td>
 
                     </tr>
                     <tr>
-                        <td><strong>Salesman Tel</strong></td>
-<!--                        <td>: <span t-field="doc.sale_person_ph"/></td>-->
+                        <td>
+                            <strong>Salesman Tel</strong>
+                        </td>
+                        <!--                        <td>: <span t-field="doc.sale_person_ph"/></td>-->
                         <td>: 099999999</td>
-                        <td><strong>Batch</strong></td>
-<!--                        <td>: <span t-field="doc.batch_no"/></td>-->
+                        <td>
+                            <strong>Batch</strong>
+                        </td>
+                        <!--                        <td>: <span t-field="doc.batch_no"/></td>-->
                         <td>: BATCH/00020</td>
                     </tr>
                     <tr>
-                        <td><strong>Delivery by</strong></td>
-<!--                        <td>: <span t-field="doc.delivery_man"/></td>-->
+                        <td>
+                            <strong>Delivery by</strong>
+                        </td>
+                        <!--                        <td>: <span t-field="doc.delivery_man"/></td>-->
                         <td>: Ye Htet Aung</td>
                         <td colspan="2"/>
                     </tr>
@@ -104,11 +116,21 @@
                 <table class="table table-sm o_main_table">
                     <thead>
                         <tr>
-                            <th style="width: 5%;"><strong>No.</strong></th>
-                            <th class="text-start" style="width: 45%;"><strong>Description</strong></th>
-                            <th class="text-end" style="width: 15%;"><strong>Quantity</strong></th>
-                            <th class="text-end" style="width: 15%;"><strong>Unit Price</strong></th>
-                            <th class="text-end" style="width: 20%;"><strong>Amount</strong></th>
+                            <th style="width: 5%;">
+                                <strong>No.</strong>
+                            </th>
+                            <th class="text-start" style="width: 45%;">
+                                <strong>Description</strong>
+                            </th>
+                            <th class="text-end" style="width: 15%;">
+                                <strong>Quantity</strong>
+                            </th>
+                            <th class="text-end" style="width: 15%;">
+                                <strong>Unit Price</strong>
+                            </th>
+                            <th class="text-end" style="width: 20%;">
+                                <strong>Amount</strong>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -120,93 +142,110 @@
                         <t t-foreach="range(13)" t-as="i">
                             <t t-if="sale_index &lt; len(normal_lines)">
                                 <tr style="border-bottom:1px solid lightgrey;">
-                                    <td><span t-esc="line_no"/></td>
-                                    <td><span t-field="normal_lines[sale_index].name"/></td>
+                                    <td>
+                                        <span t-esc="line_no"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="normal_lines[sale_index].name"/>
+                                    </td>
                                     <td class="text-end">
-                                        <span t-field="normal_lines[sale_index].product_uom_qty" t-options="{'widget': 'integer'}"/>
+                                        <span t-field="normal_lines[sale_index].product_uom_qty"
+                                              t-options="{'widget': 'integer'}"/>
                                         <span t-field="normal_lines[sale_index].product_uom" class="ms-1"/>
                                     </td>
-                                    <td class="text-end"><span t-field="normal_lines[sale_index].price_unit" t-options="{'widget': 'integer'}"/></td>
-                                    <td class="text-end"><span t-field="normal_lines[sale_index].price_subtotal" t-options='{"widget": "integer"}'/></td>
+                                    <td class="text-end">
+                                        <span t-field="normal_lines[sale_index].price_unit"
+                                              t-options="{'widget': 'integer'}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="normal_lines[sale_index].price_subtotal"
+                                              t-options='{"widget": "integer"}'/>
+                                    </td>
                                 </tr>
                                 <t t-set="sale_index" t-value="sale_index + 1"/>
                                 <t t-set="line_no" t-value="line_no + 1"/>
                             </t>
                             <!-- 2. If no more normal lines, try to print an 'FOC' line -->
-<!--                            <t t-elif="foc_index < len(foc_lines)">-->
-<!--                                &lt;!&ndash; Print FOC header only once before the first FOC item &ndash;&gt;-->
-<!--                                <tr t-if="foc_index == 0">-->
-<!--                                    <td colspan="5"><strong>FOC ITEMS</strong></td>-->
-<!--                                </tr>-->
-<!--                                <tr style="border-bottom:1px solid lightgrey;">-->
-<!--                                    <td><span t-esc="line_no"/></td>-->
-<!--                                    <td><span t-field="foc_lines[foc_index].name"/></td>-->
-<!--                                    <td class="text-end">-->
-<!--                                        <span t-field="foc_lines[foc_index].product_uom_qty" t-options="{'widget': 'integer'}"/>-->
-<!--                                        <span t-field="foc_lines[foc_index].product_uom" class="ms-1"/>-->
-<!--                                    </td>-->
-<!--                                    <td class="text-end"><span t-field="foc_lines[foc_index].price_unit" t-options="{'widget': 'integer'}"/></td>-->
-<!--                                    <td class="text-end"><span t-field="foc_lines[foc_index].price_subtotal" t-options='{"widget": "integer"}'/></td>-->
-<!--                                </tr>-->
-<!--                                <t t-set="foc_index" t-value="foc_index + 1"/>-->
-<!--                                <t t-set="line_no" t-value="line_no + 1"/>-->
-<!--                            </t>-->
+                            <!--                            <t t-elif="foc_index < len(foc_lines)">-->
+                            <!--                                &lt;!&ndash; Print FOC header only once before the first FOC item &ndash;&gt;-->
+                            <!--                                <tr t-if="foc_index == 0">-->
+                            <!--                                    <td colspan="5"><strong>FOC ITEMS</strong></td>-->
+                            <!--                                </tr>-->
+                            <!--                                <tr style="border-bottom:1px solid lightgrey;">-->
+                            <!--                                    <td><span t-esc="line_no"/></td>-->
+                            <!--                                    <td><span t-field="foc_lines[foc_index].name"/></td>-->
+                            <!--                                    <td class="text-end">-->
+                            <!--                                        <span t-field="foc_lines[foc_index].product_uom_qty" t-options="{'widget': 'integer'}"/>-->
+                            <!--                                        <span t-field="foc_lines[foc_index].product_uom" class="ms-1"/>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td class="text-end"><span t-field="foc_lines[foc_index].price_unit" t-options="{'widget': 'integer'}"/></td>-->
+                            <!--                                    <td class="text-end"><span t-field="foc_lines[foc_index].price_subtotal" t-options='{"widget": "integer"}'/></td>-->
+                            <!--                                </tr>-->
+                            <!--                                <t t-set="foc_index" t-value="foc_index + 1"/>-->
+                            <!--                                <t t-set="line_no" t-value="line_no + 1"/>-->
+                            <!--                            </t>-->
                             <!-- 3. If no more FOC lines, try to print a 'coupon' line -->
-<!--                            <t t-elif="coupon_index < len(coupon_lines)">-->
-<!--                                &lt;!&ndash; Print COUPON header only once before the first coupon item &ndash;&gt;-->
-<!--                                <tr t-if="coupon_index == 0">-->
-<!--                                    <td colspan="5"><strong>COUPON ITEMS</strong></td>-->
-<!--                                </tr>-->
-<!--                                <tr style="border-bottom:1px solid lightgrey;">-->
-<!--                                    <td><span t-esc="line_no"/></td>-->
-<!--                                    <td><span t-field="coupon_lines[coupon_index].name"/></td>-->
-<!--                                    <td class="text-end">-->
-<!--                                        <span t-field="coupon_lines[coupon_index].product_uom_qty" t-options="{'widget': 'integer'}"/>-->
-<!--                                        <span t-field="coupon_lines[coupon_index].product_uom" class="ms-1"/>-->
-<!--                                    </td>-->
-<!--                                    <td class="text-end"><span t-field="coupon_lines[coupon_index].price_unit" t-options="{'widget': 'integer'}"/></td>-->
-<!--                                    <td class="text-end"><span t-field="coupon_lines[coupon_index].price_subtotal" t-options='{"widget": "integer"}'/></td>-->
-<!--                                </tr>-->
-<!--                                <t t-set="coupon_index" t-value="coupon_index + 1"/>-->
-<!--                                <t t-set="line_no" t-value="line_no + 1"/>-->
-<!--                            </t>-->
+                            <!--                            <t t-elif="coupon_index < len(coupon_lines)">-->
+                            <!--                                &lt;!&ndash; Print COUPON header only once before the first coupon item &ndash;&gt;-->
+                            <!--                                <tr t-if="coupon_index == 0">-->
+                            <!--                                    <td colspan="5"><strong>COUPON ITEMS</strong></td>-->
+                            <!--                                </tr>-->
+                            <!--                                <tr style="border-bottom:1px solid lightgrey;">-->
+                            <!--                                    <td><span t-esc="line_no"/></td>-->
+                            <!--                                    <td><span t-field="coupon_lines[coupon_index].name"/></td>-->
+                            <!--                                    <td class="text-end">-->
+                            <!--                                        <span t-field="coupon_lines[coupon_index].product_uom_qty" t-options="{'widget': 'integer'}"/>-->
+                            <!--                                        <span t-field="coupon_lines[coupon_index].product_uom" class="ms-1"/>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td class="text-end"><span t-field="coupon_lines[coupon_index].price_unit" t-options="{'widget': 'integer'}"/></td>-->
+                            <!--                                    <td class="text-end"><span t-field="coupon_lines[coupon_index].price_subtotal" t-options='{"widget": "integer"}'/></td>-->
+                            <!--                                </tr>-->
+                            <!--                                <t t-set="coupon_index" t-value="coupon_index + 1"/>-->
+                            <!--                                <t t-set="line_no" t-value="line_no + 1"/>-->
+                            <!--                            </t>-->
                             <!-- 4. If no lines are left to print, render an empty row to maintain layout -->
-<!--                            <t t-else="">-->
-<!--                                <tr><td colspan="5" style="color:white;">.</td></tr>-->
-<!--                            </t>-->
+                            <!--                            <t t-else="">-->
+                            <!--                                <tr><td colspan="5" style="color:white;">.</td></tr>-->
+                            <!--                            </t>-->
                         </t>
 
                         <!-- Totals Section: Only appears on the very last page of the document -->
                         <t t-if="current_page == (total_page - 1)">
-<!--                            <t t-set="sub_disc_amount" t-value="sum(line.price_subtotal for line in disc_lines)"/>-->
-<!--                            <t t-set="subtotal_before_disc" t-value="doc.amount_untaxed + sub_disc_amount"/>-->
+                            <!--                            <t t-set="sub_disc_amount" t-value="sum(line.price_subtotal for line in disc_lines)"/>-->
+                            <!--                            <t t-set="subtotal_before_disc" t-value="doc.amount_untaxed + sub_disc_amount"/>-->
 
                             <!-- Subtotal before discount -->
                             <tr class="o_subtotal" style="border-top:2px solid black;">
-                                <td colspan="4" class="text-end"><strong>Subtotal</strong></td>
+                                <td colspan="4" class="text-end">
+                                    <strong>Subtotal</strong>
+                                </td>
                                 <td class="text-end">
-<!--                                    <span t-esc="subtotal_before_disc" t-options="{'widget': 'integer'}"/>-->
+                                    <!--                                    <span t-esc="subtotal_before_disc" t-options="{'widget': 'integer'}"/>-->
                                     <span t-options="{'widget': 'integer'}">1000</span>
                                 </td>
                             </tr>
                             <!-- Discount -->
-<!--                            <tr class="o_subtotal">-->
-<!--                                <td colspan="4" class="text-end"><strong>Discount</strong></td>-->
-<!--                                <td class="text-end">-->
-<!--                                    <span t-esc="sub_disc_amount" t-options="{'widget': 'integer'}"/>-->
-<!--                                </td>-->
-<!--                            </tr>-->
+                            <!--                            <tr class="o_subtotal">-->
+                            <!--                                <td colspan="4" class="text-end"><strong>Discount</strong></td>-->
+                            <!--                                <td class="text-end">-->
+                            <!--                                    <span t-esc="sub_disc_amount" t-options="{'widget': 'integer'}"/>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
                             <!-- Grand Total -->
                             <tr class="o_total" style="border-top:2px solid black;">
-                                <td colspan="2" class="text-end"><strong>Total</strong></td>
+                                <td colspan="2" class="text-end">
+                                    <strong>Total</strong>
+                                </td>
                                 <td class="text-end">
                                     <!-- 'move_line_ids' is passed from the main template -->
-<!--                                    <strong><span t-esc="doc.get_total_pk_pcs_by_order(move_line_ids, doc.name)"/></strong>-->
-<!--                                    <strong><span t-esc="doc.get_total_pk_pcs_by_order(move_line_ids, doc.name)"/></strong>-->
+                                    <!--                                    <strong><span t-esc="doc.get_total_pk_pcs_by_order(move_line_ids, doc.name)"/></strong>-->
+                                    <!--                                    <strong><span t-esc="doc.get_total_pk_pcs_by_order(move_line_ids, doc.name)"/></strong>-->
                                 </td>
                                 <td/>
                                 <td class="text-end">
-                                    <strong><span t-field="doc.amount_total" t-options='{"widget": "integer"}'/></strong>
+                                    <strong>
+                                        <span t-field="doc.amount_total" t-options='{"widget": "integer"}'/>
+                                    </strong>
                                 </td>
                             </tr>
                         </t>
@@ -217,7 +256,7 @@
                 <div t-if="current_page == (total_page - 1)" class="row mt-4">
                     <div class="col-8">
                         <strong>Remark:</strong>
-<!--                        <span t-field="doc.remark"/>-->
+                        <!--                        <span t-field="doc.remark"/>-->
                         <span>hello</span>
                         <strong>Terms &gt; Condition</strong>
                         <p>Terrrrrr</p>
@@ -261,6 +300,51 @@
                     </div>
                     <p style="page-break-after: always;"/>
 
+                </t>
+            </t>
+        </template>
+
+        <template id="a5_voucher_batch_order_list_template">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="move_line_ids" t-value="o.picking_ids.mapped('move_line_ids')"/>
+                    <div class="page">
+                        <t t-foreach="o.picking_ids" t-as="pick">
+
+                            <t t-set="doc" t-value="pick.sale_id"/>
+
+                            <table class="table table-borderless m-0" style="width:100%;">
+                                <tr>
+                                    <td style="width:50%;border-right: 1px dashed black;padding-right:12px;">
+                                        <t t-set="copy_label" t-value="2"/>
+                                        <t t-call="padetha_reports.batch_order_template"/>
+                                    </td>
+                                    <td style="width:50%;padding-left:12px;">
+                                        <t t-set="copy_label" t-value="1"/>
+                                        <t t-call="padetha_reports.batch_order_template"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="page-break-after: always;"/>
+                        </t>
+                    </div>
+                    <div class="footer">
+                        <link rel='stylesheet' href="/mscm/static/src/css/cfonts.css"/>
+                        <div class="container">
+                            <div class="row mb-3">
+                                <div class="col-auto text-center">
+                                    <span>Page :</span>
+                                    <span class="page"/>/
+                                    <span class="topage"/>
+                                </div>
+                                <div class="col-auto text-center ">
+                                    <span>Page :</span>
+                                    <span class="page"/>/
+                                    <span class="topage"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </t>
             </t>
         </template>

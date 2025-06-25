@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+
+        <record id="a5_voucher_paper_format" model="report.paperformat">
+            <field name="name">Batch Report Paper Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="dpi">90</field>
+        </record>
         <record id="action_sale_a5_voucher" model="ir.actions.report">
             <field name="name">A5 Voucher</field>
             <field name="model">sale.order</field>
@@ -10,6 +22,30 @@
             <field name="print_report_name">(object.name or 'A5_Voucher').replace('/','_')</field>
             <field name="binding_model_id" ref="sale.model_sale_order"/>
             <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
         </record>
+
+        <record id="spb_action_sale_a5_voucher" model="ir.actions.report">
+            <field name="name">A5 Voucher</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">padetha_reports.a5_voucher_batch_order_list_template</field>
+            <field name="report_file">padetha_reports.a5_voucher_batch_order_list_template</field>
+            <field name="print_report_name">(object.name or 'A5_Voucher').replace('/','_')</field>
+            <field name="binding_model_id" ref="stock_picking_batch.model_stock_picking_batch"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
+        </record>
+
+
+
+        <!--        <report id="batch_order_list_report_template"-->
+        <!--                model="stock.picking.batch"-->
+        <!--                string="A5 Voucher"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                name="padetha_reports.batch_order_list_template"-->
+        <!--                file="padetha_reports.batch_order_list_template"-->
+        <!--                print_report_name="'%s_VOUCHER' % (object.name)"-->
+        <!--                paperformat="padetha_reports.a5_voucher_paper_format"/>-->
     </data>
 </odoo>
