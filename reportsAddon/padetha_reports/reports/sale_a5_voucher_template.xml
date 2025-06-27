@@ -1,9 +1,5 @@
 <odoo>
     <data>
-        <!--
-            This is the core template for rendering one copy (e.g., Customer or Office) of the order.
-            It handles manual pagination by breaking down lines into pages of a fixed size.
-        -->
         <template id="batch_order_template">
             <!--
                 Variable Definitions:
@@ -11,8 +7,7 @@
                 - Calculate the total number of pages required based on a custom Python method.
                 - Initialize indexes for manual pagination.
             -->
-            <t t-set="normal_lines"
-               t-value="doc.order_line.filtered(lambda line: line.product_uom_qty > 0).sorted(key=lambda line: line.product_id.name)"/>
+            <t t-set="normal_lines" t-value="doc.order_line.filtered(lambda line: line.product_uom_qty &gt; 0).sorted(key=lambda line: line.product_id.name)"/>
             <!--            <t t-set="normal_lines" t-value="lines.filtered(lambda line: line.sale_type == 'sale')"/>-->
             <!--            <t t-set="foc_lines" t-value="lines.filtered(lambda line: line.sale_type == 'foc')"/>-->
             <!--            <t t-set="coupon_lines" t-value="lines.filtered(lambda line: line.sale_type == 'cupon')"/>-->
@@ -38,7 +33,7 @@
                             <strong style="font-size:25px;" t-field="doc.company_id.name"/>
                             <br/>
                             <strong>Office:</strong>
-                            <span t-field="doc.company_id.phone"/>
+                            <span t-field="doc.company_id.mobile"/>
                         </td>
                         <td style="width:30%; text-align:right; vertical-align:top;">
                             <h4>
@@ -52,70 +47,52 @@
                 </table>
 
                 <!-- Customer and Order Info -->
-                <table class="table table-borderless" style="width:100%">
-                    <tr>
-                        <td style="width:40%; font-size:25px; vertical-align:top;">
-                            <span t-field="doc.name"/>
-                        </td>
-                        <td style="width:20%; text-align:center;">
-                            <!-- The 'picking' variable is passed from the main template -->
-                            <!--                            <img t-if="picking" t-att-src="'/report/barcode/?barcode_type=QR&value=%s&width=70&height=70' % (picking.name)" style="width:70px; height:70px;"/>-->
-                        </td>
-                        <td style="width:40%; vertical-align:top; text-align:left;">
-                            <span t-field="doc.partner_id.name"/>,
-                            <!--                            <span t-field="doc.partner_id.name2"/>-->
-                            <br/>
-                            <span t-field="doc.partner_id.phone"/>
-                            <br/>
-                            <span t-field="doc.partner_id.street"/>
-                            <br/>
-                            <!--                            <span t-field="doc.partner_id.ward_id.name"/>,-->
-                            <!--                            <span t-field="doc.partner_id.township_id.name"/>-->
-                        </td>
+                <table class="table table-borderless table-sm mt-0" style="width:100%">
+                    <tr style="height:10px;">
+                        <td style="width:20%;"/>
+                         <td style="width:20%;"/>
+                         <td style="width:20%;"/>
+                        <td style="font-size:25px;width:40%font-weight:bold;"> <span t-field="doc.name"/></td>
                     </tr>
-                </table>
+                    <tr style="height:10px;">
+                        <td style="font-weight:bold;">Sale Man</td>
+                         <td>: <span t-field="doc.employee_id"/><br/>
+                           <span t-field="doc.sale_person_ph"/>
+                         </td>
+                         <td/>
+                        <td style="font-weight:bold;"><span t-field="doc.partner_id.name"/>,</td>
+                    </tr>
+                  <tr style="height:10px;">
+                    <td style="font-weight:bold;">Delivery Man</td>
+                    <td>: <span t-field="doc.delivery_man"/></td>
+                    <td/>
+                    <td>
+                        <t t-if="doc.partner_id.phone"><span t-field="doc.partner_id.phone"/>/</t>
+                        <t t-if="doc.partner_id.mobile"><span t-field="doc.partner_id.mobile"/></t>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">Vehicle</td>
+                    <td>: <span t-field="doc.delivery_location"/></td>
+                    <td/>
+                    <td style="font-weight:bold;"><t t-if="doc.partner_id.street"><span t-field="doc.partner_id.street"/></t></td>
+                  </tr>
+                   <tr>
+                    <td style="font-weight:bold;">Batch</td>
+                    <td>: <span t-field="doc.batch_no"/></td>
+                    <td/>
+                    <td>
+                         <t t-if="doc.partner_id.ward_id.name"><span t-field="doc.partner_id.ward_id.name"/>,</t>
+                        <t t-if="doc.partner_id.township_id.name"><span t-field="doc.partner_id.township_id.name"/></t>
+                    </td>
+                  </tr>
 
-                <!-- Sales and Delivery Info -->
-                <table class="table table-borderless mb-2" style="width:100%">
-                    <tr>
-                        <td style="width:17%;">
-                            <strong>Salesman</strong>
-                        </td>
-                        <!--                        <td style="width:33%;">: <span t-field="doc.sale_person"/></td>-->
-                        <td style="width:33%;">: Ye Htet Aung</td>
-                        <td style="width:17%;">
-                            <strong>Vehicle</strong>
-                        </td>
-                        <!--                        <td style="width:33%;">: <span t-field="doc.delivery_location"/></td>-->
-                        <td style="width:33%;">: WH/2343</td>
-
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Salesman Tel</strong>
-                        </td>
-                        <!--                        <td>: <span t-field="doc.sale_person_ph"/></td>-->
-                        <td>: 099999999</td>
-                        <td>
-                            <strong>Batch</strong>
-                        </td>
-                        <!--                        <td>: <span t-field="doc.batch_no"/></td>-->
-                        <td>: BATCH/00020</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Delivery by</strong>
-                        </td>
-                        <!--                        <td>: <span t-field="doc.delivery_man"/></td>-->
-                        <td>: Ye Htet Aung</td>
-                        <td colspan="2"/>
-                    </tr>
                 </table>
 
                 <!-- Order Lines Table -->
-                <table class="table table-sm o_main_table">
+                <table class="table table-borderless table-sm o_main_table; border-dark;">
                     <thead>
-                        <tr>
+                        <tr style="border-bottom:1px solid black;">
                             <th style="width: 5%;">
                                 <strong>No.</strong>
                             </th>
@@ -149,17 +126,14 @@
                                         <span t-field="normal_lines[sale_index].name"/>
                                     </td>
                                     <td class="text-end">
-                                        <span t-field="normal_lines[sale_index].product_uom_qty"
-                                              t-options="{'widget': 'integer'}"/>
+                                        <span t-field="normal_lines[sale_index].product_uom_qty" t-options="{'widget': 'integer'}"/>
                                         <span t-field="normal_lines[sale_index].product_uom" class="ms-1"/>
                                     </td>
                                     <td class="text-end">
-                                        <span t-field="normal_lines[sale_index].price_unit"
-                                              t-options="{'widget': 'integer'}"/>
+                                        <span t-field="normal_lines[sale_index].price_unit" t-options="{'widget': 'integer'}"/>
                                     </td>
                                     <td class="text-end">
-                                        <span t-field="normal_lines[sale_index].price_subtotal"
-                                              t-options='{"widget": "integer"}'/>
+                                        <span t-field="normal_lines[sale_index].price_subtotal" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
                                     </td>
                                 </tr>
                                 <t t-set="sale_index" t-value="sale_index + 1"/>
@@ -212,16 +186,18 @@
                         <!-- Totals Section: Only appears on the very last page of the document -->
                         <t t-if="current_page == (total_page - 1)">
                             <!--                            <t t-set="sub_disc_amount" t-value="sum(line.price_subtotal for line in disc_lines)"/>-->
-                            <!--                            <t t-set="subtotal_before_disc" t-value="doc.amount_untaxed + sub_disc_amount"/>-->
+                                                        <!--<t t-set="subtotal_before_disc" t-value="doc.amount_untaxed + sub_disc_amount"/>-->
+                                                        <t t-set="subtotal_before_disc" t-value="doc.amount_untaxed"/>
 
                             <!-- Subtotal before discount -->
                             <tr class="o_subtotal" style="border-top:2px solid black;">
-                                <td colspan="4" class="text-end">
+                                <td colspan="2" class="text-end">
                                     <strong>Subtotal</strong>
                                 </td>
+                                <td colspan="2" style="border-top:2px solid black;"/>
                                 <td class="text-end">
-                                    <!--                                    <span t-esc="subtotal_before_disc" t-options="{'widget': 'integer'}"/>-->
-                                    <span t-options="{'widget': 'integer'}">1000</span>
+                                    <span t-esc="subtotal_before_disc" t-options="{'widget': 'integer'}"/>
+                                    <!--<span t-options="{'widget': 'integer'}">1000</span>-->
                                 </td>
                             </tr>
                             <!-- Discount -->
@@ -244,7 +220,7 @@
                                 <td/>
                                 <td class="text-end">
                                     <strong>
-                                        <span t-field="doc.amount_total" t-options='{"widget": "integer"}'/>
+                                        <span t-field="doc.amount_total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
                                     </strong>
                                 </td>
                             </tr>
@@ -254,15 +230,16 @@
 
                 <!-- Page Footer: Only appears on the very last page -->
                 <div t-if="current_page == (total_page - 1)" class="row mt-4">
-                    <div class="col-8">
+                    <div class="col-6">
                         <strong>Remark:</strong>
-                        <!--                        <span t-field="doc.remark"/>-->
-                        <span>hello</span>
-                        <strong>Terms &gt; Condition</strong>
-                        <p>Terrrrrr</p>
+                            <span t-field="doc.remark"/><br/>
+                        <strong>Terms &amp; Condition</strong>
+                        <p><span t-field="doc.note"/></p>
                     </div>
-                    <div class="col-4 text-end">
-                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+
+                    <div class="col-6 text-end">
+                    <strong style="padding-right:50px;">Customer Sign</strong><br/>
+                       <br/><br/>Print Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
                     </div>
                 </div>
 

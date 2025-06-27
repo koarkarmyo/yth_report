@@ -13,6 +13,18 @@
             <field name="margin_right">0</field>
             <field name="dpi">90</field>
         </record>
+
+        <record id="sales_customize_format" model="report.paperformat">
+            <field name="name">Sales Customize Report</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="dpi">90</field>
+        </record>
         <record id="action_sale_a5_voucher" model="ir.actions.report">
             <field name="name">A5 Voucher</field>
             <field name="model">sale.order</field>
@@ -38,14 +50,16 @@
         </record>
 
 
-
-        <!--        <report id="batch_order_list_report_template"-->
-        <!--                model="stock.picking.batch"-->
-        <!--                string="A5 Voucher"-->
-        <!--                report_type="qweb-pdf"-->
-        <!--                name="padetha_reports.batch_order_list_template"-->
-        <!--                file="padetha_reports.batch_order_list_template"-->
-        <!--                print_report_name="'%s_VOUCHER' % (object.name)"-->
-        <!--                paperformat="padetha_reports.a5_voucher_paper_format"/>-->
+        <record id="action_sale_customize_report" model="ir.actions.report">
+            <field name="name">Sales Customize Report</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">padetha_reports.sales_customize_report</field>
+            <field name="report_file">padetha_reports.sales_customize_report</field>
+            <field name="print_report_name">(object.name or 'A5_Voucher').replace('/','_')</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.sales_customize_format"/>
+        </record>
     </data>
 </odoo>
