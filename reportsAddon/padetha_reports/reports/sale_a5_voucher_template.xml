@@ -1,7 +1,7 @@
 <odoo>
     <data>
         <template id="batch_order_template">
-            <!--
+                 <!--
                 Variable Definitions:
                 - Filter and sort order lines by type (sale, foc, coupon, disc).
                 - Calculate the total number of pages required based on a custom Python method.
@@ -38,8 +38,8 @@
                         <td style="width:30%; text-align:right; vertical-align:top;">
                             <h4>
                                 <span class="badge" style="background-color:black; color:white;">
-                                    <b t-if="copy_label == 1">Customer</b>
-                                    <b t-if="copy_label == 2">Office</b>
+                                    <b style="font-size:18px;padding:10px;" t-if="copy_label == 1">Customer</b>
+                                    <b style="font-size:18px;padding:10px;" t-if="copy_label == 2">Office</b>
                                 </span>
                             </h4>
                         </td>
@@ -52,7 +52,7 @@
                         <td style="width:20%;"/>
                          <td style="width:20%;"/>
                          <td style="width:20%;"/>
-                        <td style="font-size:25px;width:40%font-weight:bold;"> <span t-field="doc.name"/></td>
+                        <td style="font-size:23px;width:40%;font-weight:bold;"> <span t-field="doc.name"/></td>
                     </tr>
                     <tr style="height:10px;">
                         <td style="font-weight:bold;">Sale Man</td>
@@ -60,22 +60,30 @@
                            <span t-field="doc.sale_person_ph"/>
                          </td>
                          <td/>
-                        <td style="font-weight:bold;"><span t-field="doc.partner_id.name"/>,</td>
+                        <td style="font-weight:bold;font-size:14px;"><span t-field="doc.partner_id.name"/></td>
                     </tr>
                   <tr style="height:10px;">
                     <td style="font-weight:bold;">Delivery Man</td>
                     <td>: <span t-field="doc.delivery_man"/></td>
                     <td/>
                     <td>
-                        <t t-if="doc.partner_id.phone"><span t-field="doc.partner_id.phone"/>/</t>
-                        <t t-if="doc.partner_id.mobile"><span t-field="doc.partner_id.mobile"/></t>
+                         <t t-if="doc.partner_id.mobile and not doc.partner_id.phone">
+                                    <span t-field="doc.partner_id.mobile"/>
+                                </t>
+                                <t t-if="not doc.partner_id.mobile and doc.partner_id.phone">
+                                    <span t-field="doc.partner_id.phone"/>
+
+                                </t>
+                                <t t-if="doc.partner_id.phone and doc.partner_id.mobile">
+                                    <span t-field="doc.partner_id.mobile"/>/<span t-field="doc.partner_id.phone"/>
+                                </t>
                     </td>
                   </tr>
                   <tr>
                     <td style="font-weight:bold;">Vehicle</td>
                     <td>: <span t-field="doc.delivery_location"/></td>
                     <td/>
-                    <td style="font-weight:bold;"><t t-if="doc.partner_id.street"><span t-field="doc.partner_id.street"/></t></td>
+                    <td><t t-if="doc.partner_id.street"><span t-field="doc.partner_id.street"/></t></td>
                   </tr>
                    <tr>
                     <td style="font-weight:bold;">Batch</td>
@@ -231,10 +239,18 @@
                 <!-- Page Footer: Only appears on the very last page -->
                 <div t-if="current_page == (total_page - 1)" class="row mt-4">
                     <div class="col-6">
-                        <strong>Remark:</strong>
+                        <t t-if="doc.remark">
+                            <strong>Remark:</strong>
                             <span t-field="doc.remark"/><br/>
-                        <strong>Terms &amp; Condition</strong>
-                        <p><span t-field="doc.note"/></p>
+                        </t>
+                         <t t-if="doc.partner_id.comment">
+                            <span style="font-weight:bold;">Internal Note:</span>
+                            <span t-field="doc.partner_id.comment"/><br/>
+                        </t>
+                        <t t-if="doc.note">
+                              <span style="font-weight:bold;">Terms &amp; Condition</span>
+                            <span t-field="doc.note"/>
+                        </t>
                     </div>
 
                     <div class="col-6 text-end">
@@ -256,13 +272,12 @@
             It iterates through the selected picking records ('docs').
         -->
         <template id="a5voucher_report">
-            <!--            <t t-call="web.html_container">-->
-            <t t-foreach="docs" t-as="doc">
+             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.basic_layout">
 
                     <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
                     <div class="page">
-                        <table class="m-0" style="width:100%;">
+                        <table class="table table-borderless m-0" style="width:100%;">
                             <tr>
                                 <td style="width:50%;border-right: 1px dashed black;padding-right:12px;">
                                     <t t-set="copy_label" t-value="2"/>
@@ -282,7 +297,7 @@
         </template>
 
         <template id="a5_voucher_batch_order_list_template">
-            <t t-call="web.basic_layout">
+             <t t-call="web.basic_layout">
                 <t t-foreach="docs" t-as="o">
                     <t t-set="move_line_ids" t-value="o.picking_ids.mapped('move_line_ids')"/>
                     <div class="page">
@@ -308,12 +323,12 @@
                     <div class="footer">
                         <div class="container">
                             <div class="row mb-3">
-                                <div class="col-auto text-center">
-                                    <span>Page :</span>
+                                <div class="col-6 text-center mb-5">
+                                    <span>Page : </span>
                                     <span class="page"/>/
                                     <span class="topage"/>
                                 </div>
-                                <div class="col-auto text-center ">
+                                <div class="col-6 text-center">
                                     <span>Page :</span>
                                     <span class="page"/>/
                                     <span class="topage"/>
