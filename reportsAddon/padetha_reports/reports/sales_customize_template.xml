@@ -2,200 +2,176 @@
 <odoo>
     <data>
         <template id="sales_customize_report">
-             <t t-foreach="docs" t-as="doc">
+            <t t-foreach="docs" t-as="doc">
 
-                <t t-call="web.basic_layout">
-                    <p class="header">
-                        <div class="row col-12">
-                            <div class="col-6">
-                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="width:120px;" alt="Logo"/>
-                            </div>
-                            <div class="col-6"/>
-                        </div>
-                        <div class="row col-12">
-                            <div class="col-6">
-                                <div>
-                                    <span t-field="doc.company_id.name"/>
+
+                <t t-foreach="['Office', 'Customer']" t-as="copy_type">
+
+                    <t t-call="web.basic_layout">
+                        <p class="header">
+                            <div class="row col-12">
+                                <div class="col-6">
+                                    <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
+                                         style="width:120px;" alt="Logo"/>
                                 </div>
-                                <div style="margin-bottom:10px;">
-                                    <span t-if="doc.company_id.street" t-field="doc.company_id.street">,</span>
-                                    <span t-if="doc.company_id.city" t-field="doc.company_id.city">,</span>
-                                    <br/>
-                                    <span t-if="doc.company_id.state_id" t-field="doc.company_id.state_id.name">,</span>
-                                    <span t-if="doc.company_id.country_id" t-field="doc.company_id.country_id.name"/>
-                                    <br/>
-                                    <span t-if="doc.company_id.phone" t-field="doc.company_id.phone">,</span>
-                                    <br/>
-                                    <span t-if="doc.company_id.email" t-field="doc.company_id.email"/>
-                                </div>
-                                <br/>
-
-                            </div>
-                            <br/>
-
-
-                            <div class="col-6" style="padding-left:100px;">
-
-                                <!--<span style="padding-left:10px;padding-right:50px;">Customer Name-->
-                                <!--</span>-->
-                                   <h4>
+                                <div class="col-6">
+                                    <div style="padding-top:7px;float:right;">
+                                        <span style="border:1px solid black;font-size:16px;color:white;background-color:black;border-radius:5px;padding:3px;">
+                                            <t t-esc="copy_type"/>
+                                        </span>
+                                    </div>
+                                    <h5 style="padding-top:50px;padding-left:100px;font-weight:bold;">
                                         <t t-if="doc.state == 'draft'">
-                                            <span>Quotation # <span t-field="doc.name"/></span>
+                                            <span>Quotation #
+                                                <span t-field="doc.name"/>
+                                            </span>
                                         </t>
 
-                                       <t t-if="doc.state != 'draft'">
-                                             <span>Sale Order # <span t-field="doc.name"/></span>
+                                        <t t-if="doc.state != 'draft'">
+                                            <span>Sale Order #
+                                                <span t-field="doc.name"/>
+                                            </span>
                                         </t>
 
-                                    </h4>
-                                <span t-field="doc.partner_id.name"/>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row col-12">
+                                <div class="col-6">
+                                    <div>
+                                        <span t-field="doc.company_id.name"/>
+                                    </div>
+                                    <div style="margin-bottom:10px;">
+                                        <span t-if="doc.company_id.street" t-field="doc.company_id.street">,</span>
+                                        <span t-if="doc.company_id.city" t-field="doc.company_id.city">,</span>
+                                        <br/>
+                                        <span t-if="doc.company_id.state_id" t-field="doc.company_id.state_id.name">,
+                                        </span>
+                                        <span t-if="doc.company_id.country_id"
+                                              t-field="doc.company_id.country_id.name"/>
+                                        <br/>
+                                        <span t-if="doc.company_id.phone" t-field="doc.company_id.phone">,</span>
+                                        <br/>
+                                        <span t-if="doc.company_id.email" t-field="doc.company_id.email"/>
+                                    </div>
+                                    <br/>
+                                </div>
                                 <br/>
-                                <t t-if="doc.partner_id.mobile and not doc.partner_id.phone">
-                                    <!--<span style="padding-left:10px;padding-right:115px;">Mobile</span>-->
-                                    <span t-field="doc.partner_id.mobile"/>
+                                <div class="col-6" style="padding-left:100px;">
+                                    <span style="font-weight:bold;" t-field="doc.partner_id.name"/>
                                     <br/>
-                                </t>
-                                <t t-if="not doc.partner_id.mobile and doc.partner_id.phone">
-                                    <!--<span style="padding-left:10px;padding-right:115px;">Mobile</span>-->
-                                    <span t-field="doc.partner_id.phone"/>
+                                    <t t-if="doc.partner_id.mobile and not doc.partner_id.phone">
+                                        <span t-field="doc.partner_id.mobile"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="not doc.partner_id.mobile and doc.partner_id.phone">
+                                        <span t-field="doc.partner_id.phone"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="doc.partner_id.phone and doc.partner_id.mobile">
+                                        <span t-field="doc.partner_id.mobile"/>/
+                                        <span t-field="doc.partner_id.phone"/>
+                                        <br/>
+                                    </t>
+                                    <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
+                                    </span>
+                                    <span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,
+                                    </span>
                                     <br/>
+                                    <t t-set="address_parts"
+                                       t-value="[doc.partner_id.ward_id, doc.partner_id.township_id, doc.partner_id.city, doc.partner_id.state_id]"/>
+                                    <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
+                                    <t t-foreach="existing_parts" t-as="part">
+                                        <span t-field="part.name"/>
+                                        <t t-if="not part_last">,</t>
+                                    </t>
+                                </div>
+                            </div>
 
-                                </t>
-                                <t t-if="doc.partner_id.phone and doc.partner_id.mobile">
-                                    <!--<span style="padding-left:10px;padding-right:115px;">Mobile</span>-->
-                                    <span t-field="doc.partner_id.mobile"/>/<span t-field="doc.partner_id.phone"/>
+                            <table style="width:100%;" class="table table-sm table-borderless">
+                                <tr>
+                                    <td style="font-size:17px;font-weight:bold;">Sale Man</td>
+                                    <td style="font-size:17px;font-weight:bold;">Delivery Man</td>
+                                    <td style="font-size:17px;font-weight:bold;">Vehicle</td>
+                                    <td style="font-size:17px;font-weight:bold;">Batch</td>
+                                    <td style="font-size:17px;font-weight:bold;">Order Date</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="doc.employee_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.delivery_man"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.delivery_location"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.batch_no"/>
+                                    </td>
+                                    <td>
+                                        <span t-if="doc.date_order" t-field="doc.date_order"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </p>
+                        <div class="page">
+                            <t t-call="padetha_reports.so_body_template" t-lang="doc.partner_id.lang"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <t t-if="doc.remark">
+                                    <strong>Remark:</strong>
+                                    <span t-field="doc.remark"/>
                                     <br/>
                                 </t>
-                                <!--<span style="padding-left:10px;padding-right:110px;">Address</span>-->
-                                <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
-                                </span>
-                                <span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,
-                                </span>
+                                <t t-if="doc.partner_id.comment">
+                                    <span style="font-weight:bold;">Internal Note:</span>
+                                    <span t-field="doc.partner_id.comment"/>
+                                    <br/>
+                                </t>
+                                <t t-if="doc.note">
+                                    <span style="font-weight:bold;">Terms &amp; Condition</span>
+                                    <span t-field="doc.note"/>
+                                </t>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong style="padding-right:50px;">Customer Sign</strong>
                                 <br/>
-<!--                                <div style="padding-left:180px;">-->
-<!--                                    <span t-if="doc.partner_id.ward_id"-->
-<!--                                          t-field="doc.partner_id.ward_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.partner_id.township_id"-->
-<!--                                          t-field="doc.partner_id.township_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.partner_id.city" t-field="doc.partner_id.city">,</span>-->
-<!--                                    <span t-if="doc.partner_id.state_id"-->
-<!--                                          t-field="doc.partner_id.state_id.name"/>-->
-<!--                                </div>-->
                             </div>
                         </div>
+                        <div class="footer">
+                            <div class="container">
+                                <div class="row mb-3">
+                                    <div class="col-6 text-center"/>
+                                    <div class="col-6 text-end">
+                                        Print Date:
+                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
 
+                    <t t-if="not copy_type_last">
+                        <p style="page-break-after:always;"/>
+                    </t>
 
-
-                          <table style="width:100%;" class="table table-sm table-borderless">
-                            <tr>
-                                <td style="font-size:17px;font-weight:bold;">
-                                    Sale Man
-                                </td>
-                                <td style="font-size:17px;font-weight:bold;">
-                                   Delivery Man
-                                </td>
-                                 <td style="font-size:17px;font-weight:bold;">
-                                   Vehicle
-                                </td>
-                                <td style="font-size:17px;font-weight:bold;">
-                                   Batch
-                                </td>
-                                <td style="font-size:17px;font-weight:bold;">
-                                    Order Date
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                        <span t-field="doc.employee_id"/>
-<!--                                    <span t-field="doc.mmt_employee_id"/>-->
-<!--                                    <br/>-->
-<!--                                    <span t-field="doc.mmt_employee_id.mobile_phone"/>-->
-<!--                                    <br/>-->
-<!--                                    <span t-field="doc.mmt_employee_id.work_email"/>-->
-                                </td>
-                                <td>
-                                    <span t-field="doc.delivery_man"/>
-                                </td>
-                                <td>
-                                    <span t-field="doc.delivery_location"/>
-                                </td>
-                                <td>
-                                    <span t-field="doc.batch_no"/>
-                                </td>
-                                <td>
-                                    <!--<t t-if="doc.state == 'draft'">-->
-                                        <span t-if="doc.date_order" t-field="doc.date_order"/>
-                                    <!--</t>-->
-                                    <!--<span t-field="doc.date_approve"/>-->
-                                </td>
-                            </tr>
-                        </table>
-
-
-
-                    </p>
-                    <div class="page">
-                        <t t-call="padetha_reports.so_body_template" t-lang="doc.partner_id.lang"/>
-                    </div>
-                    <br/>
-<!--                    <span style="font-size:20px;font-weight:bold;" t-field="doc.note"/>-->
-<!--                    <br/>-->
-                    <br/>
-                    <br/>
-                    <div class="row mt-4">
-                    <div class="col-6">
-                         <t t-if="doc.remark">
-                            <strong>Remark:</strong>
-                            <span t-field="doc.remark"/><br/>
-                        </t>
-                         <t t-if="doc.partner_id.comment">
-                            <span style="font-weight:bold;">Internal Note:</span>
-                            <span t-field="doc.partner_id.comment"/><br/>
-                        </t>
-                        <t t-if="doc.note">
-                              <span style="font-weight:bold;">Terms &amp; Condition</span>
-                            <span t-field="doc.note"/>
-                        </t>
-                    </div>
-
-                    <div class="col-6 text-end">
-                    <strong style="padding-right:50px;">Customer Sign</strong><br/>
-                       <br/><br/>Print Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
-                    </div>
-                </div>
-
-<!--                    <div class="row col-12">-->
-<!--                        <div class="col-6">-->
-
-<!--                        </div>-->
-<!--                        <div class="col-6">-->
-<!--                            <span style="padding-right:30px;">Supplier Sign</span>-->
-<!--                            <span style="padding-right:30px;">Checker Sign</span>-->
-<!--                            <span style="padding-right:30px;">Customer Sign</span>-->
-<!--                            <br/>-->
-<!--                            <br/>-->
-<!--                            <span style="padding-left:210px;font-size:13px;">Print Date/Time</span>-->
-<!--                            <span style="font-size:13px;" t-esc="doc.get_current_datetime_myanmar()"/>-->
-<!--                        </div>-->
-
-
-<!--                    </div>-->
-
-                    <!--                      <p style="page-break-after:always;"/>-->
-                </t>
-            </t>
+                </t> <!-- End of the new 'copy_type' loop -->
+            </t> <!-- End of the original 'docs' loop -->
         </template>
 
 
         <template id="so_body_template">
-               <table class="table table-sm o_main_table" style="width:100%;">
+          <table class="table table-sm table-borderless o_main_table" style="width:100%;">
                 <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
                 <thead>
-                    <tr>
+                    <tr style="border-bottom:2px solid black;">
                         <th>No.</th>
                         <th>Description</th>
                         <th class="text-center">UoMC</th>
@@ -213,7 +189,7 @@
                     <t t-set="current_subtotal" t-value="0"/>
                     <t t-foreach="doc.order_line" t-as="line">
                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
-                        <tr>
+                        <tr style="border-bottom:1px solid gray;">
                             <td>
                                 <span t-esc="index"/>
                             </td>
