@@ -10,6 +10,7 @@
         'reports/sale_a5_voucher_template.xml',
         'reports/report_action.xml',
         'reports/sales_customize_template.xml',
+        'reports/sales_order_with_photo_template.xml',
     ],
     'installable': True,
     'application': False,
