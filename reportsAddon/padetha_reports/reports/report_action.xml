@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-
+    <!--Batch Report Paper Format-->
         <record id="a5_voucher_paper_format" model="report.paperformat">
             <field name="name">Batch Report Paper Format</field>
             <field name="default" eval="False"/>
@@ -14,6 +14,8 @@
             <field name="dpi">90</field>
         </record>
 
+
+<!--        Sales Customize Report Paper Format-->
         <record id="sales_customize_format" model="report.paperformat">
             <field name="name">Sales Customize Report</field>
             <field name="default" eval="False"/>
@@ -25,21 +27,25 @@
             <field name="margin_right">5</field>
             <field name="dpi">90</field>
         </record>
+
+<!--        SO with Photo Paper Format-->
         <record id="so_with_photo_format" model="report.paperformat">
             <field name="name">SO with Photo</field>
             <field name="default" eval="False"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">5</field>
-            <field name="margin_bottom">5</field>
+            <field name="margin_bottom">10</field>
             <field name="margin_left">5</field>
             <field name="margin_right">5</field>
             <field name="dpi">90</field>
         </record>
+
+<!--        A5 Voucher-->
         <record id="action_sale_a5_voucher" model="ir.actions.report">
             <field name="name">A5 Voucher</field>
             <field name="model">sale.order</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.a5voucher_report</field>
             <field name="report_file">padetha_reports.a5voucher_report</field>
             <field name="print_report_name">(object.name or 'A5_Voucher').replace('/','_')</field>
@@ -48,10 +54,11 @@
             <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
         </record>
 
+<!--        Sales Voucher Print-->
         <record id="spb_action_sale_a5_voucher" model="ir.actions.report">
-            <field name="name">A5 Voucher</field>
+            <field name="name">Sales Voucher Print</field>
             <field name="model">stock.picking.batch</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.a5_voucher_batch_order_list_template</field>
             <field name="report_file">padetha_reports.a5_voucher_batch_order_list_template</field>
             <field name="print_report_name">(object.name or 'A5_Voucher').replace('/','_')</field>
@@ -60,7 +67,7 @@
             <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
         </record>
 
-
+        <!--Sales Customize Report-->
         <record id="action_sale_customize_report" model="ir.actions.report">
             <field name="name">Sales Customize Report</field>
             <field name="model">sale.order</field>
@@ -72,6 +79,8 @@
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="padetha_reports.sales_customize_format"/>
         </record>
+
+<!--        Sales Order With Photo-->
         <record id="action_sales_order_with_photo_report" model="ir.actions.report">
             <field name="name">Sales Order With Photo</field>
             <field name="model">sale.order</field>
@@ -80,6 +89,19 @@
             <field name="report_file">padetha_reports.report_sales_order_with_photo</field>
             <field name="print_report_name">'SO with Photo - %s - %s' % (object.name,object.partner_id.name)</field>
             <field name="binding_model_id" ref="model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.so_with_photo_format"/>
+        </record>
+
+<!--        Purchase Order Customize Report -->
+        <record id="action_purchase_order_report" model="ir.actions.report">
+            <field name="name">Purchase Order (Customize)</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">padetha_reports.report_customize_purchase_order</field>
+            <field name="report_file">padetha_reports.report_customize_purchase_order</field>
+            <field name="print_report_name">'PO - %s - %s' % (object.name,object.partner_id.name)</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="padetha_reports.so_with_photo_format"/>
         </record>

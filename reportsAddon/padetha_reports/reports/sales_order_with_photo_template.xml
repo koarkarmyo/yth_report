@@ -192,11 +192,11 @@
 
 
         <template id="so_with_photo_body_template">
-            <table class="table table-sm o_main_table" style="width:100%;">
+             <table class="table table-sm o_main_table table-borderless" style="width:100%;">
                 <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
                 <thead>
-                    <tr>
+                    <tr style="border-bottom:2px solid black;">
                         <th class="text-center">No.</th>
                         <th class="text-center">Photo</th>
                         <th class="text-center">Description</th>
@@ -215,26 +215,25 @@
                     <t t-set="current_subtotal" t-value="0"/>
                     <t t-foreach="doc.order_line" t-as="line">
                         <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
-                        <tr>
-                            <td>
+                        <tr style="border-bottom:1px solid lightgray;">
+                            <td style="text-align:center;vertical-align:middle;">
                                 <span t-esc="index"/>
                             </td>
                             <td style="width:17%;">
-                                <span t-field="line.product_id.image_512"
-                                      t-options="{&quot;widget&quot;: &quot;image&quot;}"/>
+                                <span t-field="line.product_id.image_512" t-options="{&quot;widget&quot;: &quot;image&quot;}"/>
                             </td>
                             <td style="vertical-align:top;">
                                 <span t-field="line.name"/>
                             </td>
-                            <td style="text-align:center;">
-<!--                                <span t-if="line.product_id.uom_category_id" t-field="line.product_id.uom_category_id.name"/>-->
+                            <td style="text-align:center;vertical-align:middle;">
+                                <span t-if="line.product_id.uom_category_id" t-field="line.product_id.uom_category_id.name"/>
 
                             </td>
-                            <td class="text-center">
+                            <td style="text-align:center;vertical-align:middle;">
                                 <span t-if="line.product_uom_qty" t-field="line.product_uom_qty"/>
                                 <span t-if="line.product_uom" t-field="line.product_uom.name" groups="uom.group_uom"/>
                             </td>
-                            <td class="text-center">
+                            <td style="text-align:center;vertical-align:middle;">
                                 <span t-field="line.price_unit"/>
                             </td>
                             <t t-if="dis_val == True">
@@ -242,9 +241,8 @@
                                     <span t-field="line.discount"/>
                                 </td>
                             </t>
-                            <td class="text-end">
-                                <span t-field="line.price_subtotal"
-                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                            <td class="text-end" style="vertical-align:middle;">
+                                <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                             </td>
                         </tr>
 
@@ -256,8 +254,7 @@
                             Total
                         </td>
                         <td colspan="2" style="text-align:right;">
-                            <span t-esc="current_subtotal"
-                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                            <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                         </td>
                     </tr>
                 </tbody>

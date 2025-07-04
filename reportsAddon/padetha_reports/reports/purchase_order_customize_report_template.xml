@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="report_customize_purchase_order">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <p class="header">
+                        <div class="row col-12">
+                            <div class="col-6">
+                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
+                                     style="width:120px;" alt="Logo"/>
+                            </div>
+                            <div class="col-6"></div>
+                        </div>
+                        <div class="row col-12">
+                            <div class="col-6">
+                                <div>
+                                    <span t-field="doc.company_id.name"/>
+                                </div>
+                                <div style="margin-bottom:10px;">
+                                    <span t-if="doc.company_id.street" t-field="doc.company_id.street">,</span>
+                                    <span t-if="doc.company_id.city" t-field="doc.company_id.city">,</span>
+                                    <br/>
+                                    <span t-if="doc.company_id.state_id" t-field="doc.company_id.state_id.name">,</span>
+                                    <span t-if="doc.company_id.country_id" t-field="doc.company_id.country_id.name"/>
+                                    <br/>
+                                    <span t-if="doc.company_id.phone" t-field="doc.company_id.phone">,</span>
+                                    <br/>
+                                    <span t-if="doc.company_id.email" t-field="doc.company_id.email"/>
+                                </div>
+                            </div>
+                            <br/>
+
+
+                            <div class="col-6">
+                                <div class="col-6" style="padding-left:100px;">
+                                    <span style="font-weight:bold;" t-field="doc.partner_id.name"/>
+                                    <br/>
+                                    <t t-if="doc.partner_id.mobile and not doc.partner_id.phone">
+                                        <span t-field="doc.partner_id.mobile"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="not doc.partner_id.mobile and doc.partner_id.phone">
+                                        <span t-field="doc.partner_id.phone"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="doc.partner_id.phone and doc.partner_id.mobile">
+                                        <span t-field="doc.partner_id.mobile"/>/
+                                        <span t-field="doc.partner_id.phone"/>
+                                        <br/>
+                                    </t>
+                                    <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
+                                    </span>
+                                    <!--                                    <span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,-->
+                                    <!--                                    </span>-->
+                                    <br/>
+                                    <!--                                    <t t-set="address_parts"-->
+                                    <!--                                       t-value="[doc.partner_id.ward_id, doc.partner_id.township_id, doc.partner_id.city, doc.partner_id.state_id]"/>-->
+                                    <!--                                    <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>-->
+                                    <!--                                    <t t-foreach="existing_parts" t-as="part">-->
+                                    <!--                                        <span t-field="part.name"/>-->
+                                    <!--                                        <t t-if="not part_last">,</t>-->
+                                    <!--                                    </t>-->
+                                </div>
+
+                            </div>
+                        </div>
+                        <br/>
+
+
+                        <table style="width:100%;" class="table table-sm table-borderless">
+                            <tr>
+                                <td style="font-size:17px;font-weight:bold;">
+                                    Purchase Representative
+                                </td>
+                                <td style="font-size:17px;font-weight:bold;">
+                                    Vendor Reference
+                                </td>
+                                <td style="font-size:17px;font-weight:bold;">
+                                    Order Date
+                                </td>
+                                <td style="font-size:17px;font-weight:bold;">
+                                    Delivery Location
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <!--                                    <span t-field="doc.mmt_employee_id"/>-->
+                                    <!--                                    <br/>-->
+                                    <!--                                    <span t-field="doc.mmt_employee_id.mobile_phone"/>-->
+                                    <!--                                    <br/>-->
+                                    <!--                                    <span t-field="doc.mmt_employee_id.work_email"/>-->
+                                </td>
+                                <td>
+                                    <!--                                    <span t-field="doc.partner_ref"/>-->
+                                </td>
+                                <td>
+                                    <t t-if="doc.state == 'draft'">
+                                        <span t-if="doc.date_order" t-field="doc.date_order"/>
+                                    </t>
+                                    <span t-field="doc.date_approve"/>
+                                </td>
+                                <td>
+                                    <!--                                    <span t-field="doc.picking_ids.location_dest_id"/>-->
+                                </td>
+                            </tr>
+                        </table>
+
+                        <h4>
+                            <span t-if="doc.state in ['draft','purchase', 'done']">Purchase Order #
+                                <span t-field="doc.name"/>
+                            </span>
+
+                        </h4>
+
+                    </p>
+                    <div class="page">
+                        <t t-call="padetha_reports.po_customize_body_template" t-lang="doc.partner_id.lang"/>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <div class="row col-12">
+                        <div class="col-6">
+                            <t t-if="doc.payment_term_id">
+                                <strong>Payment Term:</strong>
+                                <span t-field="doc.payment_term_id.name"/>
+                            </t>
+                            <t t-if="doc.partner_id.comment">
+                                <span style="font-weight:bold;">Internal Note:</span>
+                                <span t-field="doc.partner_id.comment"/>
+                            </t>
+                            <t t-if="doc.notes">
+                                <span style="font-weight:bold;">Terms &amp; Condition</span>
+                                <span t-field="doc.notes"/>
+                            </t>
+
+                        </div>
+                        <div class="col-6">
+                            <span style="padding-right:30px;">Supplier Sign</span>
+                            <span style="padding-right:30px;">Checker Sign</span>
+                            <span style="padding-right:30px;">Customer Sign</span>
+
+                        </div>
+
+
+                    </div>
+                    <div class="footer">
+                        <div class="container">
+                            <div class="row mb-3">
+                                <div class="col-6 text-center">
+                                    <span>Page :</span>
+                                    <span class="page"/>/
+                                    <span class="topage"/>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span>Print Date:
+                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="page-break-after:always;"/>
+
+                </t>
+            </t>
+        </template>
+
+
+        <template id="po_customize_body_template">
+            <table class="table table-sm o_main_table table-borderless" style="width:100%;">
+                <!--                <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>-->
+                <t t-set="dis_val" t-value="False"/>
+                <thead>
+                    <tr style="border-bottom:2px solid black;">
+                        <th>No.</th>
+                        <th>Description</th>
+                        <th class="text-center">UOM</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-center">Unit Price</th>
+                        <!--                        <t t-if="dis_line &gt; 0">-->
+                        <!--                            <th class="text-center" name="dis">Dis%</th>-->
+                        <!--                            <t t-set="dis_val" t-value="True"/>-->
+                        <!--                        </t>-->
+                        <th class="text-end">Sub Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="index" t-value="1"/>
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-foreach="doc.order_line" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                        <tr style="border-bottom:1px solid lightgray;">
+                            <td>
+                                <span t-esc="index"/>
+                            </td>
+                            <td>
+                                <span t-field="line.name"/>
+                            </td>
+                            <td style="text-aling:center;">
+                                <!--                                <span t-field="line.product_id.uom_category_id.name"/>-->
+                            </td>
+                            <td class="text-center">
+                                <span t-field="line.product_qty"  t-options="{'widget': 'integer'}"/>
+                                <span t-field="line.product_uom.name" groups="uom.group_uom"/>
+                            </td>
+                            <td class="text-center">
+                                <span t-field="line.price_unit"  t-options="{'widget': 'integer'}"/>
+                            </td>
+                            <t t-if="dis_val == True">
+                                <td class="text-center">
+                                    <span t-field="line.discount"/>
+                                </td>
+                            </t>
+                            <td class="text-end">
+                                <span t-field="line.price_subtotal"
+                                      t-options="{&quot;widget&quot;: &quot;integer&quot;, &quot;display_currency&quot;: doc.currency_id,}"/>
+                            </td>
+                        </tr>
+
+
+                        <t t-set="index" t-value="index + 1"/>
+                    </t>
+                    <tr>
+                        <td colspan="5" style="text-align:right">
+                            Total
+                        </td>
+                        <td colspan="2" style="text-align:right;">
+                            <span t-esc="current_subtotal"
+                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </template>
+    </data>
+</odoo>

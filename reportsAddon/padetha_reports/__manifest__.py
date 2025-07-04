@@ -11,6 +11,7 @@
         'reports/report_action.xml',
         'reports/sales_customize_template.xml',
         'reports/sales_order_with_photo_template.xml',
+        'reports/purchase_order_customize_report_template.xml',
     ],
     'installable': True,
     'application': False,

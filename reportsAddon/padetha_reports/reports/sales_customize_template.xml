@@ -119,7 +119,9 @@
                         <div class="page">
                             <t t-call="padetha_reports.so_body_template" t-lang="doc.partner_id.lang"/>
                         </div>
-                        <br/>
+                          <t t-foreach="doc.tag_ids" t-as="tag">
+                            <span style="border:1px solid black;border-radius:5px;background-color:black;color:white;margin:3px;" t-esc="tag.name"/>
+                        </t>
                         <br/>
                         <br/>
                         <div class="row mt-4">
@@ -144,22 +146,40 @@
                                 <br/>
                             </div>
                         </div>
+
+
+                        <p style="page-break-after:always;"/>
+                        <!--<div class="footer">-->
+                        <!--    <div class="container">-->
+                        <!--        <div class="row mb-3">-->
+                        <!--            <div class="col-6 text-center"/>-->
+                        <!--            <div class="col-6 text-end">-->
+                        <!--                Print Date:-->
+                        <!--                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>-->
+                        <!--            </div>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--</div>-->
                         <div class="footer">
                             <div class="container">
                                 <div class="row mb-3">
-                                    <div class="col-6 text-center"/>
+                                    <div class="col-6 text-center">
+                                        <span>Page :</span>
+                                        <span class="page"/>/
+                                        <span class="topage"/>
+                                    </div>
                                     <div class="col-6 text-end">
-                                        Print Date:
-                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                                        <span>Print Date:
+                                            <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </t>
 
-                    <t t-if="not copy_type_last">
                         <p style="page-break-after:always;"/>
                     </t>
+
 
                 </t> <!-- End of the new 'copy_type' loop -->
             </t> <!-- End of the original 'docs' loop -->
@@ -167,7 +187,7 @@
 
 
         <template id="so_body_template">
-          <table class="table table-sm table-borderless o_main_table" style="width:100%;">
+            <table class="table table-sm table-borderless o_main_table" style="width:100%;">
                 <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
                 <thead>
@@ -212,7 +232,8 @@
                                 </td>
                             </t>
                             <td class="text-end">
-                                <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id,'widget': 'integer'}"/>
+                                <span t-field="line.price_subtotal"
+                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id,'widget': 'integer'}"/>
                             </td>
                         </tr>
 
@@ -224,7 +245,8 @@
                             Total
                         </td>
                         <td colspan="2" style="text-align:right;">
-                            <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id,'widget': 'integer'}"/>
+                            <span t-esc="current_subtotal"
+                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id,'widget': 'integer'}"/>
                         </td>
                     </tr>
                 </tbody>
