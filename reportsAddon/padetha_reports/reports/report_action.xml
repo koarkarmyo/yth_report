@@ -105,5 +105,29 @@
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="padetha_reports.so_with_photo_format"/>
         </record>
+
+        <record id="action_purchase_quotation_report" model="ir.actions.report">
+            <field name="name">Purchase Quotation (Customize)</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">padetha_reports.report_customize_purchase_quotation</field>
+            <field name="report_file">padetha_reports.report_customize_purchase_quotation</field>
+            <field name="print_report_name">'Quotation - %s - %s' % (object.name,object.partner_id.name)</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.so_with_photo_format"/>
+        </record>
+
+        <record id="action_purchase_with_photo_report" model="ir.actions.report">
+            <field name="name">Purchase With Photo</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">padetha_reports.report_purchase_order_with_photo</field>
+            <field name="report_file">padetha_reports.report_purchase_order_with_photo</field>
+            <field name="print_report_name">'PO With Photo - %s - %s' % (object.name,object.partner_id.name)</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.so_with_photo_format"/>
+        </record>
     </data>
 </odoo>

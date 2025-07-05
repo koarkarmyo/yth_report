@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-        <template id="report_customize_purchase_order">
+        <template id="report_customize_purchase_quotation">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.basic_layout">
                     <p class="header">
@@ -108,7 +108,7 @@
                         </table>
 
                         <h4>
-                            <span t-if="doc.state in ['draft','purchase', 'done']">Purchase Order #
+                            <span>Request For Quotation #
                                 <span t-field="doc.name"/>
                             </span>
 
@@ -116,7 +116,7 @@
 
                     </p>
                     <div class="page">
-                        <t t-call="padetha_reports.po_customize_body_template" t-lang="doc.partner_id.lang"/>
+                        <t t-call="padetha_reports.poq_customize_body_template" t-lang="doc.partner_id.lang"/>
                     </div>
                     <br/>
                     <br/>
@@ -171,7 +171,7 @@
         </template>
 
 
-        <template id="po_customize_body_template">
+        <template id="poq_customize_body_template">
             <table class="table table-sm o_main_table table-borderless" style="width:100%;">
                 <!--                <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>-->
                 <t t-set="dis_val" t-value="False"/>
@@ -181,12 +181,11 @@
                         <th>Description</th>
                         <th class="text-center">UOM</th>
                         <th class="text-center">Qty</th>
-                        <th class="text-center">Unit Price</th>
                         <!--                        <t t-if="dis_line &gt; 0">-->
                         <!--                            <th class="text-center" name="dis">Dis%</th>-->
                         <!--                            <t t-set="dis_val" t-value="True"/>-->
                         <!--                        </t>-->
-                        <th class="text-end">Sub Total</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -208,32 +207,15 @@
                                 <span t-field="line.product_qty"  t-options="{'widget': 'integer'}"/>
                                 <span t-field="line.product_uom.name" groups="uom.group_uom"/>
                             </td>
-                            <td class="text-center">
-                                <span t-field="line.price_unit"  t-options="{'widget': 'integer'}"/>
-                            </td>
-                            <t t-if="dis_val == True">
-                                <td class="text-center">
-                                    <span t-field="line.discount"/>
-                                </td>
-                            </t>
-                            <td class="text-end">
-                                <span t-field="line.price_subtotal"
-                                      t-options="{&quot;widget&quot;: &quot;integer&quot;, &quot;display_currency&quot;: doc.currency_id,}"/>
-                            </td>
+
+
+
                         </tr>
 
 
                         <t t-set="index" t-value="index + 1"/>
                     </t>
-                    <tr>
-                        <td colspan="5" style="text-align:right">
-                            Total
-                        </td>
-                        <td colspan="2" style="text-align:right;">
-                            <span t-esc="current_subtotal"
-                                  t-options="{&quot;widget&quot;: &quot;integer&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
 
