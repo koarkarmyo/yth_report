@@ -10,7 +10,7 @@
                                 <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
                                      style="width:120px;" alt="Logo"/>
                             </div>
-                            <div class="col-6"></div>
+                            <div class="col-6"/>
                         </div>
                         <div class="row col-12">
                             <div class="col-6">
@@ -32,36 +32,34 @@
                             <br/>
 
 
-                            <div class="col-6">
-                                <div class="col-6" style="padding-left:100px;">
-                                    <span style="font-weight:bold;" t-field="doc.partner_id.name"/>
+                            <div class="col-6" style="padding-left:100px;">
+                                <span style="font-weight:bold;" t-field="doc.partner_id.name"/>
+                                <br/>
+                                <t t-if="doc.partner_id.mobile and not doc.partner_id.phone">
+                                    <span t-field="doc.partner_id.mobile"/>
                                     <br/>
-                                    <t t-if="doc.partner_id.mobile and not doc.partner_id.phone">
-                                        <span t-field="doc.partner_id.mobile"/>
-                                        <br/>
-                                    </t>
-                                    <t t-if="not doc.partner_id.mobile and doc.partner_id.phone">
-                                        <span t-field="doc.partner_id.phone"/>
-                                        <br/>
-                                    </t>
-                                    <t t-if="doc.partner_id.phone and doc.partner_id.mobile">
-                                        <span t-field="doc.partner_id.mobile"/>/
-                                        <span t-field="doc.partner_id.phone"/>
-                                        <br/>
-                                    </t>
-                                    <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
-                                    </span>
-                                    <!--                                    <span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,-->
-                                    <!--                                    </span>-->
+                                </t>
+                                <t t-if="not doc.partner_id.mobile and doc.partner_id.phone">
+                                    <span t-field="doc.partner_id.phone"/>
                                     <br/>
-                                    <!--                                    <t t-set="address_parts"-->
-                                    <!--                                       t-value="[doc.partner_id.ward_id, doc.partner_id.township_id, doc.partner_id.city, doc.partner_id.state_id]"/>-->
-                                    <!--                                    <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>-->
-                                    <!--                                    <t t-foreach="existing_parts" t-as="part">-->
-                                    <!--                                        <span t-field="part.name"/>-->
-                                    <!--                                        <t t-if="not part_last">,</t>-->
-                                    <!--                                    </t>-->
-                                </div>
+                                </t>
+                                <t t-if="doc.partner_id.phone and doc.partner_id.mobile">
+                                    <span t-field="doc.partner_id.mobile"/>/
+                                    <span t-field="doc.partner_id.phone"/>
+                                    <br/>
+                                </t>
+                                <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
+                                </span>
+                                <!--                                    <span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,-->
+                                <!--                                    </span>-->
+                                <br/>
+                                <t t-set="address_parts"
+                                   t-value="[doc.partner_id.ward_id, doc.partner_id.township_id, doc.partner_id.city, doc.partner_id.state_id]"/>
+                                <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
+                                <t t-foreach="existing_parts" t-as="part">
+                                    <span t-field="part.name"/>
+                                    <t t-if="not part_last">,</t>
+                                </t>
 
                             </div>
                         </div>
@@ -93,7 +91,7 @@
                                     <!--                                    <span t-field="doc.mmt_employee_id.work_email"/>-->
                                 </td>
                                 <td>
-                                    <!--                                    <span t-field="doc.partner_ref"/>-->
+                                    <span t-field="doc.partner_ref"/>
                                 </td>
                                 <td>
                                     <t t-if="doc.state == 'draft'">
@@ -102,7 +100,7 @@
                                     <span t-field="doc.date_approve"/>
                                 </td>
                                 <td>
-                                    <!--                                    <span t-field="doc.picking_ids.location_dest_id"/>-->
+                                    <span t-field="doc.picking_ids.location_dest_id"/>
                                 </td>
                             </tr>
                         </table>
@@ -150,7 +148,7 @@
                     <div class="footer">
                         <div class="container">
                             <div class="row mb-3">
-                                <div class="col-6 text-center">
+                                <div class="col-6 text-end">
                                     <span>Page :</span>
                                     <span class="page"/>/
                                     <span class="topage"/>
@@ -173,7 +171,7 @@
 
         <template id="po_customize_body_template">
             <table class="table table-sm o_main_table table-borderless" style="width:100%;">
-                <!--                <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>-->
+                <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
                 <thead>
                     <tr style="border-bottom:2px solid black;">
@@ -182,10 +180,10 @@
                         <th class="text-center">UOM</th>
                         <th class="text-center">Qty</th>
                         <th class="text-center">Unit Price</th>
-                        <!--                        <t t-if="dis_line &gt; 0">-->
-                        <!--                            <th class="text-center" name="dis">Dis%</th>-->
-                        <!--                            <t t-set="dis_val" t-value="True"/>-->
-                        <!--                        </t>-->
+                        <t t-if="dis_line &gt; 0">
+                            <th class="text-center" name="dis">Dis%</th>
+                            <t t-set="dis_val" t-value="True"/>
+                        </t>
                         <th class="text-end">Sub Total</th>
                     </tr>
                 </thead>
@@ -202,14 +200,14 @@
                                 <span t-field="line.name"/>
                             </td>
                             <td style="text-align:center;">
-                                <!--                                <span t-field="line.product_id.uom_category_id.name"/>-->
+                                <span t-field="line.product_id.uom_category_id.name"/>
                             </td>
                             <td class="text-center">
-                                <span t-field="line.product_qty"  t-options="{'widget': 'integer'}"/>
+                                <span t-field="line.product_qty" t-options="{'widget': 'integer'}"/>
                                 <span t-field="line.product_uom.name" groups="uom.group_uom"/>
                             </td>
                             <td class="text-center">
-                                <span t-field="line.price_unit"  t-options="{'widget': 'integer'}"/>
+                                <span t-field="line.price_unit" t-options="{'widget': 'integer'}"/>
                             </td>
                             <t t-if="dis_val == True">
                                 <td class="text-center">

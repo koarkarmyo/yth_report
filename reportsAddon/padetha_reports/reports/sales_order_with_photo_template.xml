@@ -2,13 +2,14 @@
 <odoo>
     <data>
         <template id="report_sales_order_with_photo">
-             <t t-foreach="docs" t-as="doc">
+            <t t-foreach="docs" t-as="doc">
 
                 <t t-call="web.basic_layout">
                     <p class="header">
                         <div class="row col-12">
                             <div class="col-6">
-                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="width:120px;" alt="Logo"/>
+                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
+                                     style="width:120px;" alt="Logo"/>
                             </div>
                             <div class="col-6"/>
                         </div>
@@ -30,34 +31,34 @@
                                 </div>
                                 <br/>
 
-<!--                                <div>-->
-<!--                                    <span style="font-weight:bold;">Delivery Location :</span>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.picking_ids.location_dest_id"/>&ndash;&gt;-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <strong>Delivery Address :</strong>-->
-<!--                                    <br/>-->
-                                    <!--                                    <span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.street"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.street">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.street2"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.street2">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.ward_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.ward_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.township_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.city"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.city">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.state_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.state_id.name"/>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.country_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.country_id.name"/>-->
-<!--                                </div>-->
+                                <!--                                <div>-->
+                                <!--                                    <span style="font-weight:bold;">Delivery Location :</span>-->
+                                <!--                                    &lt;!&ndash;                                    <span t-field="doc.picking_ids.location_dest_id"/>&ndash;&gt;-->
+                                <!--                                </div>-->
+                                <!--                                <div>-->
+                                <!--                                    <strong>Delivery Address :</strong>-->
+                                <!--                                    <br/>-->
+                                <!--                                    <span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/>-->
+                                <!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.street"-->
+                                <!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.street">,-->
+                                <!--                                    </span>-->
+                                <!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.street2"-->
+                                <!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.street2">,-->
+                                <!--                                    </span>-->
+                                <!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.ward_id"-->
+                                <!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.ward_id.name">,-->
+                                <!--                                    </span>-->
+                                <!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.township_id"-->
+                                <!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.name">,-->
+                                <!--                                    </span>-->
+                                <!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.city"-->
+                                <!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.city">,-->
+                                <!--                                    </span>-->
+                                <!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.state_id"-->
+                                <!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.state_id.name"/>-->
+                                <!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.country_id"-->
+                                <!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.country_id.name"/>-->
+                                <!--                                </div>-->
                             </div>
                             <br/>
 
@@ -88,17 +89,17 @@
                                 </span>
                                 <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
                                 </span>
-<!--                                <span t-if="doc.partner_id.street2"-->
-<!--                                      t-field="doc.partner_id.street2">,-->
-<!--                                </span>-->
+                                <!--                                <span t-if="doc.partner_id.street2"-->
+                                <!--                                      t-field="doc.partner_id.street2">,-->
+                                <!--                                </span>-->
                                 <br/>
                                 <div style="padding-left:180px;">
-<!--                                    <span t-if="doc.partner_id.ward_id"-->
-<!--                                          t-field="doc.partner_id.ward_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.partner_id.township_id"-->
-<!--                                          t-field="doc.partner_id.township_id.name">,-->
-<!--                                    </span>-->
+                                    <!--                                    <span t-if="doc.partner_id.ward_id"-->
+                                    <!--                                          t-field="doc.partner_id.ward_id.name">,-->
+                                    <!--                                    </span>-->
+                                    <!--                                    <span t-if="doc.partner_id.township_id"-->
+                                    <!--                                          t-field="doc.partner_id.township_id.name">,-->
+                                    <!--                                    </span>-->
                                     <span t-if="doc.partner_id.city" t-field="doc.partner_id.city">,</span>
                                     <span t-if="doc.partner_id.state_id" t-field="doc.partner_id.state_id.name"/>
                                 </div>
@@ -107,40 +108,40 @@
                         <br/>
 
 
-<!--                        <table style="width:80%;" class="table table-sm table-borderless">-->
-<!--                            <tr>-->
-<!--                                <td style="font-size:17px;font-weight:bold;">-->
-<!--                                    Sales Representative-->
-<!--                                </td>-->
-<!--                                <td style="font-size:17px;font-weight:bold;">-->
-<!--                                    Customer Reference-->
-<!--                                </td>-->
-<!--                                <td style="font-size:17px;font-weight:bold;">-->
-<!--                                    Order Date-->
-<!--                                </td>-->
+                        <!--                        <table style="width:80%;" class="table table-sm table-borderless">-->
+                        <!--                            <tr>-->
+                        <!--                                <td style="font-size:17px;font-weight:bold;">-->
+                        <!--                                    Sales Representative-->
+                        <!--                                </td>-->
+                        <!--                                <td style="font-size:17px;font-weight:bold;">-->
+                        <!--                                    Customer Reference-->
+                        <!--                                </td>-->
+                        <!--                                <td style="font-size:17px;font-weight:bold;">-->
+                        <!--                                    Order Date-->
+                        <!--                                </td>-->
 
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id"/>&ndash;&gt;-->
-<!--                                    Ye Htet Aung-->
-<!--                                    <br/>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id.mobile_phone"/>&ndash;&gt;-->
-<!--                                    0988888888-->
-<!--                                    <br/>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id.work_email"/>&ndash;&gt;-->
-<!--                                    example@gmail.com-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.partner_ref"/>&ndash;&gt;-->
-<!--                                    partner_ref-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.date_approve"/>&ndash;&gt;-->
-<!--                                    23/4/5-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                        </table>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr>-->
+                        <!--                                <td>-->
+                        <!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id"/>&ndash;&gt;-->
+                        <!--                                    Ye Htet Aung-->
+                        <!--                                    <br/>-->
+                        <!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id.mobile_phone"/>&ndash;&gt;-->
+                        <!--                                    0988888888-->
+                        <!--                                    <br/>-->
+                        <!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id.work_email"/>&ndash;&gt;-->
+                        <!--                                    example@gmail.com-->
+                        <!--                                </td>-->
+                        <!--                                <td>-->
+                        <!--                                    &lt;!&ndash;                                    <span t-field="doc.partner_ref"/>&ndash;&gt;-->
+                        <!--                                    partner_ref-->
+                        <!--                                </td>-->
+                        <!--                                <td>-->
+                        <!--                                    &lt;!&ndash;                                    <span t-field="doc.date_approve"/>&ndash;&gt;-->
+                        <!--                                    23/4/5-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        <!--                        </table>-->
 
                         <h4>
                             <t t-if="doc.state == 'draft'">
@@ -181,21 +182,21 @@
 
                     </div>
                     <div class="footer">
-                    <div class="container">
-                        <div class="row mb-3">
-                            <div class="col-6 text-center">
-                                <span>Page :</span>
-                                <span class="page"/>/
-                                <span class="topage"/>
-                            </div>
-                            <div class="col-6 text-end">
-                                <span>Print Date:
-                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
-                                </span>
+                        <div class="container">
+                            <div class="row mb-3">
+                                <div class="col-6 text-center">
+                                    <span>Page :</span>
+                                    <span class="page"/>/
+                                    <span class="topage"/>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span>Print Date:
+                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
                 </t>
 
@@ -204,7 +205,7 @@
 
 
         <template id="so_with_photo_body_template">
-             <table class="table table-sm o_main_table table-borderless" style="width:100%;">
+            <table class="table table-sm o_main_table table-borderless" style="width:100%;">
                 <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
                 <thead>
@@ -232,13 +233,14 @@
                                 <span t-esc="index"/>
                             </td>
                             <td style="width:17%;">
-                                <span t-field="line.product_id.image_512" t-options="{&quot;widget&quot;: &quot;image&quot;}"/>
+                                <img t-if="line.product_id.image_512" t-att-src="image_data_uri(line.product_id.image_512)" style="max-height: 100px; max-width: 100%;"/>
                             </td>
                             <td style="vertical-align:top;">
                                 <span t-field="line.name"/>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
-                                <span t-if="line.product_id.uom_category_id" t-field="line.product_id.uom_category_id.name"/>
+                                <span t-if="line.product_id.uom_category_id"
+                                      t-field="line.product_id.uom_category_id.name"/>
 
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
@@ -254,7 +256,8 @@
                                 </td>
                             </t>
                             <td class="text-end" style="vertical-align:middle;">
-                                <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                                <span t-field="line.price_subtotal"
+                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                             </td>
                         </tr>
 
@@ -266,7 +269,8 @@
                             Total
                         </td>
                         <td colspan="2" style="text-align:right;">
-                            <span t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                            <span t-esc="current_subtotal"
+                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                         </td>
                     </tr>
                 </tbody>

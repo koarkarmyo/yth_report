@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="summary_and_loading_list_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-set="move_line_ids" t-value="o.picking_ids.mapped('move_line_ids')"/>
+                        <t t-set="copies" t-value="[1, 2]"/>
+                        <t t-foreach="copies" t-as="copy_label">
+                            <t t-call="padetha_reports.loading_summary_template"/>
+                            <p style="page-break-after: always;"/>
+                            <t t-call="padetha_reports.loading_list_template"/>
+                            <t t-if="copy_label != 2">
+                                <p style="page-break-after: always;"/>
+                            </t>
+                        </t>
+
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="loading_header_info">
+            <table style="width: 100%;" class="table table-borderless table-sm">
+                <tbody>
+                    <tr>
+                        <td colspan="3">
+                        </td>
+                        <td colspan="2">
+                            <span style="font-size:23px;font-weight:bold;" t-field="o.name"/>
+                        </td>
+                    </tr>
+                    <tr style="height:12px;">
+                        <td style="width: 20%;">
+                            <strong>Batch State</strong>
+                        </td>
+                        <td>
+                            <span>:</span>
+                            <span t-field="o.state"/>
+                        </td>
+                        <td style="width:30%;"></td>
+                        <td>
+                            <strong>Total Amount</strong>
+                        </td>
+                        <td>
+                            <t t-set="total_order_amount" t-value="o.get_order_total_amount(o.picking_ids)"/>
+                            <span>:</span>
+                            <span t-esc="'{:,}'.format(int(total_order_amount))"/>
+                        </td>
+                    </tr>
+
+                    <!-- Vehicle and Voucher Count -->
+                    <tr style="height:30px;">
+                        <td>
+                            <strong>Vehicle</strong>
+                        </td>
+                        <td>
+                            <span>:</span>
+                            <!--                                <span t-field="o.location_id"/>-->
+                        </td>
+                        <td></td>
+                        <td>
+                            <strong>Voucher Count</strong>
+                        </td>
+                        <td>
+                            <span>:</span>
+                            <span t-esc="len(o.picking_ids)"/>
+                        </td>
+                    </tr>
+
+                    <!-- Remark and SKU Count -->
+                    <tr>
+                        <td>
+                            <strong>Delivery Man</strong>
+                        </td>
+                        <td>
+                            <span>:</span>
+                            <!--                                <span t-field="o.remark"/>-->
+                        </td>
+                        <td></td>
+                        <td>
+                            <strong>SKU Count</strong>
+                        </td>
+                        <td>
+                            <span>:</span>
+                            <span t-esc="o.get_total_sku_count(move_line_ids)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td>
+                            <strong>Total Weight</strong>
+                        </td>
+                        <td>
+                            <span>:</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <strong>Total Volume</strong>
+                        </td>
+                        <td>
+                            <span>:</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+
+        <template id="loading_summary_template">
+            <div class="page">
+                <div class="row mt32 mb32">
+                    <div class="col-3 mt-5">
+                        <span class="m-0"
+                              t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                    </div>
+                    <div class="col-6 mt-4">
+                        <h2 class="text-center">
+                            Delivery Summary
+                        </h2>
+                    </div>
+                    <div class="col-3 text-end">
+                        <h4>
+                            <t t-if="copy_label==1">
+                                <span style="background-color:black;color:white;border:1px solid black;border-radius:5px;font-size:20px;">
+                                    Office
+                                </span>
+                            </t>
+                            <t t-if="copy_label==2">
+                                <span style="background-color:black;color:white;border:1px solid black;border-radius:5px;font-size:20px;">
+                                    Delivery Man
+                                </span>
+                            </t>
+
+                        </h4>
+                    </div>
+
+                </div>
+
+                <t t-call="padetha_reports.loading_header_info"/>
+                <br/>
+                <table class="table table-sm o_main_table table-borderless">
+                    <thead>
+                        <tr style="border-bottom:2px solid black;">
+                            <th style="text-align:center;vertical-align:middle;font-weight:bold;">No.</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Order No</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Customer<br/>Phone No.
+                            </th>
+                            <th style="vertical-align:middle;font-weight:bold;">Ward</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Township</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Sale Man</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Amount</th>
+                            <th style="vertical-align:middle;width:20%;font-weight:bold;">Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<!--                        <t t-set="sorted_picks" t-value="sorted(o.picking_ids, key=lambda p: (p.partner_id.ward_id.name or '', p.partner_id.name or ''))"/>-->
+                        <t t-set="total_amount" t-value="0"/>
+                        <t t-set="pick_index" t-value="0"/>
+<!--                        <t t-foreach="sorted_picks" t-as="pick">-->
+                        <t t-foreach="o.picking_ids" t-as="pick">
+                            <t t-set="order" t-value="pick.sale_id"/>
+                            <t t-set="total_amount" t-value="total_amount + int(order.amount_total)"/>
+                            <t t-set="pick_index" t-value="pick_index + 1"/>
+                            <tr style="border-bottom:1px solid lightgray;">
+                                <td>
+                                    <span t-esc="pick_index"/>
+                                </td>
+                                <td>
+                                    <span t-field="pick.origin"/>
+                                </td>
+                                <td>
+                                    <span t-field="pick.partner_id.name"/>
+                                    <br/>
+                                    <span t-field="pick.partner_id.phone"/>
+                                </td>
+                                <td>
+                                    <!--                                <span t-field="pick.partner_id.ward_id"/>-->
+                                </td>
+                                <td>
+                                    <!--                                <span t-field="pick.partner_id.township_id"/>-->
+                                </td>
+                                <td>
+                                    <!--                                <span t-esc="order.sale_person.name"/>-->
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="int(order.amount_total)"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </t>
+                        <tr style="border-top: 2px solid black;">
+                            <td colspan="6" class="text-end">
+                                <strong>Total Amount :</strong>
+                            </td>
+                            <td class="text-end">
+                                <span t-esc="total_amount"/>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer">
+                <div class="container">
+                    <div class="row mb-3">
+                        <div class="col-6 text-end">
+                            <span>Page :</span>
+                            <span class="page"/>/
+                            <span class="topage"/>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span>Print Date:
+                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="loading_list_template">
+            <style type="text/css">
+                .table-layout-fixed {
+                table-layout: fixed;
+                width: 100%;
+                }
+                .col-product { width: 28%; padding-left: 1.5rem; }
+                .col-quantity { width: 12%; }
+                .col-loading-qty { width: 25%; }
+                .col-remark { width: 35%; }
+
+                .badge-copy {
+                color: white;
+                background-color: black;
+                border-radius: 5px;
+                font-size:20px;
+                }
+
+                .category-header {
+                font-size: 1.1rem;
+                text-decoration: underline;
+                font-weight: bold;
+                }
+                .total-row {
+                border-top: 2px solid black;
+                }
+            </style>
+
+            <div class="page">
+
+                <!-- Header Section -->
+                <div class="row mt-4 mb-5">
+                    <div class="col-3">
+                        <span class="m-0"
+                              t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                    </div>
+                    <div class="col-6 text-center">
+                        <h2>Loading List</h2>
+                    </div>
+                    <div class="col-3 text-end">
+                        <h4>
+                            <span class="badge badge-copy">
+                                <t t-if="copy_label==1">Office</t>
+                                <t t-if="copy_label==2">Delivery Man</t>
+                            </span>
+                        </h4>
+                    </div>
+                </div>
+
+                <!-- Called Header Info Template -->
+                <t t-call="padetha_reports.loading_header_info"/>
+
+                <!-- Products Table -->
+                <table class="table table-sm table-borderless table-layout-fixed mt-4">
+                    <thead>
+                        <tr style="border-bottom:2px solid black;">
+                            <th class="col-product">Product</th>
+                            <th class="col-quantity text-end">Quantity</th>
+                            <th class="col-loading-qty text-center">Loading Quantity</th>
+                            <th class="col-remark text-center">Remark</th>
+                        </tr>
+                    </thead>
+                    <!-- Loop through each location -->
+                    <t t-set="locations"
+                       t-value="move_line_ids.mapped('location_id').sorted(lambda location: location.complete_name)"/>
+                    <t t-foreach="locations" t-as="location">
+                        <t t-set="location_move_line"
+                           t-value="move_line_ids.filtered(lambda x: x.location_id==location)"/>
+                        <!-- The 'products' variable was set but not used in the original template, kept for compatibility -->
+                        <t t-set="products" t-value="location_move_line.mapped('product_id')"/>
+                        <tbody>
+                            <t t-set="data_list" t-value="o.get_product_list(location_move_line)"/>
+
+                            <!-- Loop through each category -->
+                            <t t-foreach="data_list['datas']" t-as="data">
+                                <!-- Category Header Row -->
+                                <tr style="border-bottom:1px solid lightgray;">
+                                    <td colspan="4">
+                                        <span class="category-header"
+                                              t-esc="data['category_name']"/>
+                                    </td>
+                                </tr>
+                                <!-- Loop through products in the category -->
+                                <t t-foreach="data['product_list']" t-as="product">
+                                    <tr style="border-bottom:1px solid lightgray;">
+                                        <td class="col-product">
+                                            <span t-esc="product['name']"/>
+                                        </td>
+                                        <td class="col-quantity text-end">
+                                            <span t-esc="product['qty']"
+                                                  t-options="{'widget':'integer'}"/>
+                                            <span t-esc="product['uom']"/>
+                                        </td>
+                                        <td class="col-loading-qty text-center">
+                                            <span t-esc="product['bal_qty']"/>
+                                        </td>
+                                        <td class="col-remark"></td>
+                                    </tr>
+                                </t>
+                            </t>
+
+                            <!-- Total Row for the location/group -->
+                            <!--                            <tr class="total-row">-->
+                            <!--                                <td></td>-->
+                            <!--                                <td class="text-end">-->
+                            <!--                                    <strong>Total :</strong>-->
+                            <!--                                </td>-->
+                            <!--                                <td class="text-center">-->
+                            <!--                                    <strong>-->
+                            <!--                                        <span t-esc="data_list['total_qty']"/>-->
+                            <!--                                    </strong>-->
+                            <!--                                </td>-->
+                            <!--                                <td></td>-->
+                            <!--                            </tr>-->
+                        </tbody>
+                    </t>
+                </table>
+            </div>
+
+            <!-- Footer Section -->
+            <div class="footer">
+                <div class="text-center">
+                    <span>Loading Page :</span>
+                    <span class="page"/>
+                    /
+                    <span class="topage"/>
+                </div>
+            </div>
+        </template>
+
+
+    </data>
+</odoo>

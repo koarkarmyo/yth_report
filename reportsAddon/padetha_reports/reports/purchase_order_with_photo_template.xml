@@ -8,10 +8,9 @@
                     <p class="header">
                         <div class="row col-12">
                             <div class="col-6">
-                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
-                                     style="width:120px;" alt="Logo"/>
+                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="width:120px;" alt="Logo"/>
                             </div>
-                            <div class="col-6"></div>
+                            <div class="col-6"/>
                         </div>
                         <div class="row col-12">
                             <div class="col-6">
@@ -31,44 +30,16 @@
                                 </div>
                                 <br/>
 
-<!--                                <div>-->
-<!--                                    <span style="font-weight:bold;">Delivery Location :</span>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.picking_ids.location_dest_id"/>&ndash;&gt;-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <strong>Delivery Address :</strong>-->
-<!--                                    <br/>-->
-                                    <!--                                    <span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.street"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.street">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.street2"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.street2">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.ward_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.ward_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.township_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.city"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.city">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.state_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.state_id.name"/>-->
-<!--                                    <span t-if="doc.picking_type_id.warehouse_id.partner_id.country_id"-->
-<!--                                          t-field="doc.picking_type_id.warehouse_id.partner_id.country_id.name"/>-->
-<!--                                </div>-->
                             </div>
                             <br/>
 
 
                             <div class="col-6">
 
-                                <span style="padding-left:10px;padding-right:70px;">
+                                <span style="padding-left:10px;padding-right:60px;">
                                     <strong>Supplier Name</strong>
                                 </span>
-                                <span t-field="doc.partner_id.name"/>
+                                <span style="font-weight:bold;" t-field="doc.partner_id.name"/>
                                 <br/>
                                 <t t-if="doc.partner_id.mobile">
                                     <span style="padding-left:10px;padding-right:120px;">
@@ -78,7 +49,7 @@
                                     <br/>
                                 </t>
                                 <t t-if="doc.partner_id.phone">
-                                    <span style="padding-left:10px;padding-right:125px;">
+                                    <span style="padding-left:10px;padding-right:123px;">
                                         <strong>Phone</strong>
                                     </span>
                                     <span t-field="doc.partner_id.phone"/>
@@ -87,63 +58,25 @@
                                 <span style="padding-left:10px;padding-right:110px;">
                                     <strong>Address</strong>
                                 </span>
-                                <span t-if="doc.partner_id.street"
-                                      t-field="doc.partner_id.street">,
+                                <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">
+                                </span>,
+                                <span t-if="doc.partner_id.street2"
+                                      t-field="doc.partner_id.street2">,
                                 </span>
-<!--                                <span t-if="doc.partner_id.street2"-->
-<!--                                      t-field="doc.partner_id.street2">,-->
-<!--                                </span>-->
                                 <br/>
-                                <div style="padding-left:180px;">
-<!--                                    <span t-if="doc.partner_id.ward_id"-->
-<!--                                          t-field="doc.partner_id.ward_id.name">,-->
-<!--                                    </span>-->
-<!--                                    <span t-if="doc.partner_id.township_id"-->
-<!--                                          t-field="doc.partner_id.township_id.name">,-->
-<!--                                    </span>-->
-                                    <span t-if="doc.partner_id.city" t-field="doc.partner_id.city">,</span>
-                                    <span t-if="doc.partner_id.state_id"
-                                          t-field="doc.partner_id.state_id.name"/>
-                                </div>
+                                <div style="padding-left:175px;">
+                                        <t t-set="address_parts" t-value="[doc.partner_id.ward_id, doc.partner_id.township_id, doc.partner_id.city, doc.partner_id.state_id]"/>
+                                        <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
+                                        <t t-foreach="existing_parts" t-as="part">
+                                            <span t-field="part.name"/>
+                                            <t t-if="not part_last">,</t>
+                                        </t>
+                                 </div>
                             </div>
                         </div>
                         <br/>
 
 
-<!--                        <table style="width:80%;" class="table table-sm table-borderless">-->
-<!--                            <tr>-->
-<!--                                <td style="font-size:17px;font-weight:bold;">-->
-<!--                                    Sales Representative-->
-<!--                                </td>-->
-<!--                                <td style="font-size:17px;font-weight:bold;">-->
-<!--                                    Customer Reference-->
-<!--                                </td>-->
-<!--                                <td style="font-size:17px;font-weight:bold;">-->
-<!--                                    Order Date-->
-<!--                                </td>-->
-
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id"/>&ndash;&gt;-->
-<!--                                    Ye Htet Aung-->
-<!--                                    <br/>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id.mobile_phone"/>&ndash;&gt;-->
-<!--                                    0988888888-->
-<!--                                    <br/>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.mmt_employee_id.work_email"/>&ndash;&gt;-->
-<!--                                    example@gmail.com-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.partner_ref"/>&ndash;&gt;-->
-<!--                                    partner_ref-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.date_approve"/>&ndash;&gt;-->
-<!--                                    23/4/5-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                        </table>-->
 
                         <h4>
                             <t t-if="doc.state == 'draft'">
@@ -183,7 +116,7 @@
                     <div class="footer">
                             <div class="container">
                                 <div class="row mb-3">
-                                    <div class="col-6 text-center">
+                                    <div class="col-6 text-end">
                                         <span>Page :</span>
                                         <span class="page"/>/
                                         <span class="topage"/>
@@ -205,14 +138,14 @@
 
 
         <template id="po_with_photo_body_template">
-             <table class="table table-sm o_main_table table-borderless" style="width:100%;">
+            <table class="table table-sm o_main_table table-borderless" style="width:100%;">
                 <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
                 <thead>
                     <tr style="border-bottom:2px solid black;">
                         <th class="text-center">No.</th>
                         <th class="text-center">Photo</th>
-                        <th class="text-center">Description</th>
+                        <th class="text-start">Description</th>
                         <th class="text-center">UoMC</th>
                         <th class="text-center">Qty</th>
                         <th class="text-center">Unit Price</th>
@@ -220,7 +153,7 @@
                             <th name="dis">Dis%</th>
                             <t t-set="dis_val" t-value="True"/>
                         </t>
-                        <th class="text-center">Sub Total</th>
+                        <th class="text-end">Sub Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -233,21 +166,21 @@
                                 <span t-esc="index"/>
                             </td>
                             <td style="width:17%;">
-                                <span t-field="line.product_id.image_512" t-options="{&quot;widget&quot;: &quot;image&quot;}"/>
+                                 <img t-if="line.product_id.image_512" t-att-src="image_data_uri(line.product_id.image_512)" style="max-height: 100px; max-width: 100%;"/>
                             </td>
                             <td style="vertical-align:top;">
                                 <span t-field="line.name"/>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
-<!--                                <span t-if="line.product_id.uom_category_id" t-field="line.product_id.uom_category_id.name"/>-->
+                                <span t-if="line.product_id.uom_category_id" t-field="line.product_id.uom_category_id.name"/>
 
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
-                                <span t-if="line.product_uom_qty" t-field="line.product_uom_qty"/>
+                                <span t-if="line.product_uom_qty" t-field="line.product_uom_qty" t-options="{'widget':'integer'}"/>
                                 <span t-if="line.product_uom" t-field="line.product_uom.name" groups="uom.group_uom"/>
                             </td>
                             <td style="text-align:center;vertical-align:middle;">
-                                <span t-field="line.price_unit"/>
+                                <span t-field="line.price_unit"  t-options="{'widget':'integer'}"/>
                             </td>
                             <t t-if="dis_val == True">
                                 <td class="text-center">
@@ -255,7 +188,7 @@
                                 </td>
                             </t>
                             <td class="text-end" style="vertical-align:middle;">
-                                <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+                                <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;integer&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
                             </td>
                         </tr>
 

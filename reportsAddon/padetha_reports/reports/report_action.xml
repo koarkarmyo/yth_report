@@ -67,6 +67,19 @@
             <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
         </record>
 
+<!--        Summary_and_loading_list_template-->
+        <record id="sale_and_loading_list_voucher" model="ir.actions.report">
+            <field name="name">Summary and Loading List</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.summary_and_loading_list_template</field>
+            <field name="report_file">padetha_reports.summary_and_loading_list_template</field>
+            <field name="print_report_name">(object.name or 'Sale_Loading_Report').replace('/','_')</field>
+            <field name="binding_model_id" ref="stock_picking_batch.model_stock_picking_batch"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.sales_customize_format"/>
+        </record>
+
         <!--Sales Customize Report-->
         <record id="action_sale_customize_report" model="ir.actions.report">
             <field name="name">Sales Customize Report</field>
