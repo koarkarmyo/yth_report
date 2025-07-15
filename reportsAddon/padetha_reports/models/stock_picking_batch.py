@@ -70,8 +70,8 @@ class StockPickingBatch(models.Model):
             # Calculate final values like 'bal_qty' for each product
             for prod_dict in product_list:
                 product_obj = prod_dict.pop('product_obj')
-                prod_dict['bal_qty'] = prod_dict['qty']
-                # prod_dict['bal_qty'] = product_obj._get_multi_uom_long_form(prod_dict['qty'])
+                # prod_dict['bal_qty'] = prod_dict['qty']
+                prod_dict['bal_qty'] = product_obj._get_multi_uom_long_form(prod_dict['qty'])
 
             final_category_list.append({
                 'category_name': category_data['category_name'],

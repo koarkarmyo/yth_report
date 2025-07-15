@@ -22,7 +22,7 @@
         </template>
 
         <template id="loading_header_info">
-            <table style="width: 100%;" class="table table-borderless table-sm">
+             <table style="width: 100%;" class="table table-borderless table-sm">
                 <tbody>
                     <tr>
                         <td colspan="3">
@@ -39,7 +39,7 @@
                             <span>:</span>
                             <span t-field="o.state"/>
                         </td>
-                        <td style="width:30%;"></td>
+                        <td style="width:30%;"/>
                         <td>
                             <strong>Total Amount</strong>
                         </td>
@@ -57,9 +57,9 @@
                         </td>
                         <td>
                             <span>:</span>
-                            <!--                                <span t-field="o.location_id"/>-->
+                            <span t-field="o.location_id"/>
                         </td>
-                        <td></td>
+                        <td/>
                         <td>
                             <strong>Voucher Count</strong>
                         </td>
@@ -76,9 +76,9 @@
                         </td>
                         <td>
                             <span>:</span>
-                            <!--                                <span t-field="o.remark"/>-->
+                            <span t-field="o.delivery_man"/>
                         </td>
-                        <td></td>
+                        <td/>
                         <td>
                             <strong>SKU Count</strong>
                         </td>
@@ -92,18 +92,19 @@
                         </td>
                         <td>
                         </td>
-                        <td></td>
+                        <td/>
                         <td>
                             <strong>Total Weight</strong>
                         </td>
                         <td>
-                            <span>:</span>
+                            <span>: </span>
+                            <span t-field="o.total_weight" t-options="{'widget':'integer'}"/>
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td/>
+                        <td/>
+                        <td/>
                         <td>
                             <strong>Total Volume</strong>
                         </td>
@@ -118,33 +119,23 @@
 
         <template id="loading_summary_template">
             <div class="page">
-                <div class="row mt32 mb32">
-                    <div class="col-3 mt-5">
-                        <span class="m-0"
-                              t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                                <div class="row mt-4 mb-5">
+                    <div class="col-3">
+                        <span class="m-0" t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
                     </div>
-                    <div class="col-6 mt-4">
-                        <h2 class="text-center">
-                            Delivery Summary
-                        </h2>
+                    <div class="col-6 text-center">
+                        <h2>Delivery Summary</h2>
                     </div>
                     <div class="col-3 text-end">
                         <h4>
-                            <t t-if="copy_label==1">
-                                <span style="background-color:black;color:white;border:1px solid black;border-radius:5px;font-size:20px;">
-                                    Office
-                                </span>
-                            </t>
-                            <t t-if="copy_label==2">
-                                <span style="background-color:black;color:white;border:1px solid black;border-radius:5px;font-size:20px;">
-                                    Delivery Man
-                                </span>
-                            </t>
-
+                           <span class="badge badge-copy">
+                                <t t-if="copy_label==1">Office</t>
+                                <t t-if="copy_label==2">Delivery Man</t>
+                            </span>
                         </h4>
                     </div>
-
                 </div>
+
 
                 <t t-call="padetha_reports.loading_header_info"/>
                 <br/>
@@ -158,16 +149,16 @@
                             <th style="vertical-align:middle;font-weight:bold;">Ward</th>
                             <th style="vertical-align:middle;font-weight:bold;">Township</th>
                             <th style="vertical-align:middle;font-weight:bold;">Sale Man</th>
-                            <th style="vertical-align:middle;font-weight:bold;">Amount</th>
+                            <th style="vertical-align:middle;font-weight:bold;" class="text-end">Amount</th>
                             <th style="vertical-align:middle;width:20%;font-weight:bold;">Reason</th>
                         </tr>
                     </thead>
                     <tbody>
-<!--                        <t t-set="sorted_picks" t-value="sorted(o.picking_ids, key=lambda p: (p.partner_id.ward_id.name or '', p.partner_id.name or ''))"/>-->
+                        <t t-set="sorted_picks" t-value="sorted(o.picking_ids, key=lambda p: (p.partner_id.ward_id.name or '', p.partner_id.name or ''))"/>
                         <t t-set="total_amount" t-value="0"/>
                         <t t-set="pick_index" t-value="0"/>
-<!--                        <t t-foreach="sorted_picks" t-as="pick">-->
-                        <t t-foreach="o.picking_ids" t-as="pick">
+                        <t t-foreach="sorted_picks" t-as="pick">
+                        <!--<t t-foreach="o.picking_ids" t-as="pick">-->
                             <t t-set="order" t-value="pick.sale_id"/>
                             <t t-set="total_amount" t-value="total_amount + int(order.amount_total)"/>
                             <t t-set="pick_index" t-value="pick_index + 1"/>
@@ -184,18 +175,18 @@
                                     <span t-field="pick.partner_id.phone"/>
                                 </td>
                                 <td>
-                                    <!--                                <span t-field="pick.partner_id.ward_id"/>-->
+                                     <span t-field="pick.partner_id.ward_id"/>
                                 </td>
                                 <td>
-                                    <!--                                <span t-field="pick.partner_id.township_id"/>-->
+                                    <span t-field="pick.partner_id.township_id"/>
                                 </td>
                                 <td>
-                                    <!--                                <span t-esc="order.sale_person.name"/>-->
+                                   <span t-esc="order.employee_id.name"/>
                                 </td>
                                 <td class="text-end">
                                     <span t-esc="int(order.amount_total)"/>
                                 </td>
-                                <td></td>
+                                <td/>
                             </tr>
                         </t>
                         <tr style="border-top: 2px solid black;">
@@ -205,7 +196,7 @@
                             <td class="text-end">
                                 <span t-esc="total_amount"/>
                             </td>
-                            <td></td>
+                            <td/>
                         </tr>
                     </tbody>
                 </table>
@@ -229,7 +220,7 @@
         </template>
 
         <template id="loading_list_template">
-            <style type="text/css">
+              <style type="text/css">
                 .table-layout-fixed {
                 table-layout: fixed;
                 width: 100%;
@@ -244,6 +235,8 @@
                 background-color: black;
                 border-radius: 5px;
                 font-size:20px;
+                border:1px solid black;
+                padding:5px;
                 }
 
                 .category-header {
@@ -261,8 +254,7 @@
                 <!-- Header Section -->
                 <div class="row mt-4 mb-5">
                     <div class="col-3">
-                        <span class="m-0"
-                              t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                        <span class="m-0" t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
                     </div>
                     <div class="col-6 text-center">
                         <h2>Loading List</h2>
@@ -291,11 +283,9 @@
                         </tr>
                     </thead>
                     <!-- Loop through each location -->
-                    <t t-set="locations"
-                       t-value="move_line_ids.mapped('location_id').sorted(lambda location: location.complete_name)"/>
+                    <t t-set="locations" t-value="move_line_ids.mapped('location_id').sorted(lambda location: location.complete_name)"/>
                     <t t-foreach="locations" t-as="location">
-                        <t t-set="location_move_line"
-                           t-value="move_line_ids.filtered(lambda x: x.location_id==location)"/>
+                        <t t-set="location_move_line" t-value="move_line_ids.filtered(lambda x: x.location_id==location)"/>
                         <!-- The 'products' variable was set but not used in the original template, kept for compatibility -->
                         <t t-set="products" t-value="location_move_line.mapped('product_id')"/>
                         <tbody>
@@ -306,8 +296,7 @@
                                 <!-- Category Header Row -->
                                 <tr style="border-bottom:1px solid lightgray;">
                                     <td colspan="4">
-                                        <span class="category-header"
-                                              t-esc="data['category_name']"/>
+                                        <span class="category-header" t-esc="data['category_name']"/>
                                     </td>
                                 </tr>
                                 <!-- Loop through products in the category -->
@@ -317,14 +306,13 @@
                                             <span t-esc="product['name']"/>
                                         </td>
                                         <td class="col-quantity text-end">
-                                            <span t-esc="product['qty']"
-                                                  t-options="{'widget':'integer'}"/>
+                                            <span t-esc="product['qty']" t-options="{'widget':'integer'}"/>
                                             <span t-esc="product['uom']"/>
                                         </td>
                                         <td class="col-loading-qty text-center">
                                             <span t-esc="product['bal_qty']"/>
                                         </td>
-                                        <td class="col-remark"></td>
+                                        <td class="col-remark"/>
                                     </tr>
                                 </t>
                             </t>
