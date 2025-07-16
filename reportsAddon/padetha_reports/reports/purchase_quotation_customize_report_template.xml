@@ -175,7 +175,7 @@
                     <tr style="border-bottom:2px solid black;">
                         <th>No.</th>
                         <th>Description</th>
-                        <th class="text-center">UOM</th>
+                        <th class="text-center">UoMC</th>
                         <th class="text-center">Qty</th>
                             <t t-if="dis_line &gt; 0">
                                 <th class="text-center" name="dis">Dis%</th>

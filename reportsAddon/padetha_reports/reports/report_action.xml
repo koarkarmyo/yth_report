@@ -27,6 +27,17 @@
             <field name="margin_right">5</field>
             <field name="dpi">90</field>
         </record>
+          <record id="address_print_format" model="report.paperformat">
+            <field name="name">Sales Customize Report</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="dpi">90</field>
+        </record>
 
 <!--        SO with Photo Paper Format-->
         <record id="so_with_photo_format" model="report.paperformat">
@@ -67,6 +78,59 @@
             <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
         </record>
 
+<!--        Address Print for sale order-->
+        <record id="address_print_action" model="ir.actions.report">
+            <field name="name">Address Print</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.address_print_template</field>
+            <field name="report_file">padetha_reports.address_print_template</field>
+            <field name="print_report_name">'AddressPrint'</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
+        </record>
+
+
+        <!--        Address Print for purchase order-->
+        <record id="address_print_action_for_po" model="ir.actions.report">
+            <field name="name">Address Print</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.address_print_template</field>
+            <field name="report_file">padetha_reports.address_print_template</field>
+            <field name="print_report_name">'AddressPrint'</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
+        </record>
+
+          <!--        Address Print for Partner-->
+        <record id="address_print_action_for_partner" model="ir.actions.report">
+            <field name="name">Address Print</field>
+            <field name="model">res.partner</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.address_print_template_for_partner</field>
+            <field name="report_file">padetha_reports.address_print_template_for_partner</field>
+            <field name="print_report_name">'AddressPrint'</field>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
+        </record>
+
+         <!--       Sale Pan Sar-->
+        <record id="address_print_action_for_po" model="ir.actions.report">
+            <field name="name">Pan Sar</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.pan_sar_template</field>
+            <field name="report_file">padetha_reports.pan_sar_template</field>
+            <field name="print_report_name">'PanSar - %s - %s' % (object.name,object.partner_id.name)</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
+        </record>
+
 <!--        Summary_and_loading_list_template-->
         <record id="sale_and_loading_list_voucher" model="ir.actions.report">
             <field name="name">Summary and Loading List</field>
@@ -84,7 +148,7 @@
         <record id="action_sale_customize_report" model="ir.actions.report">
             <field name="name">Sales Customize Report</field>
             <field name="model">sale.order</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.sales_customize_report</field>
             <field name="report_file">padetha_reports.sales_customize_report</field>
             <field name="print_report_name">(object.name or 'A5_Voucher').replace('/','_')</field>
@@ -97,7 +161,7 @@
         <record id="action_sales_order_with_photo_report" model="ir.actions.report">
             <field name="name">Sales Order With Photo</field>
             <field name="model">sale.order</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.report_sales_order_with_photo</field>
             <field name="report_file">padetha_reports.report_sales_order_with_photo</field>
             <field name="print_report_name">'SO with Photo - %s - %s' % (object.name,object.partner_id.name)</field>
@@ -110,7 +174,7 @@
         <record id="action_purchase_order_report" model="ir.actions.report">
             <field name="name">Purchase Order (Customize)</field>
             <field name="model">purchase.order</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.report_customize_purchase_order</field>
             <field name="report_file">padetha_reports.report_customize_purchase_order</field>
             <field name="print_report_name">'PO - %s - %s' % (object.name,object.partner_id.name)</field>
@@ -122,7 +186,7 @@
         <record id="action_purchase_quotation_report" model="ir.actions.report">
             <field name="name">Purchase Quotation (Customize)</field>
             <field name="model">purchase.order</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.report_customize_purchase_quotation</field>
             <field name="report_file">padetha_reports.report_customize_purchase_quotation</field>
             <field name="print_report_name">'Quotation - %s - %s' % (object.name,object.partner_id.name)</field>
@@ -134,7 +198,7 @@
         <record id="action_purchase_with_photo_report" model="ir.actions.report">
             <field name="name">Purchase With Photo</field>
             <field name="model">purchase.order</field>
-            <field name="report_type">qweb-pdf</field>
+            <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.report_purchase_order_with_photo</field>
             <field name="report_file">padetha_reports.report_purchase_order_with_photo</field>
             <field name="print_report_name">'PO With Photo - %s - %s' % (object.name,object.partner_id.name)</field>

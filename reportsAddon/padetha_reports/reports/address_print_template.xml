@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="address_print_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="padetha_reports.address_print_detail_template"/>
+                        <br/>
+                        <hr style="border-bottom:2px dashed black; height:1%;"/>
+                        <br/>
+                        <t t-call="padetha_reports.address_print_detail_template"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="address_print_detail_template">
+            <div style="height:630px;">
+
+                <table border="0" style="width:100%;border:none;">
+                    <tr style="height:280px;">
+                        <td colspan="3"
+                            style="border:3px solid black;text-align:center;vertical-align:middle;font-size:30px;">
+                            <span t-if="o.partner_id" t-field="o.partner_id.name"/>
+                            <br/>
+                            <span t-if="o.partner_id.street" t-field="o.partner_id.street"/>
+                            <br/>
+                            <t t-set="address_parts"
+                               t-value="[o.partner_id.city, o.partner_id.state_id.name]"/>
+                            <!--                           t-value="[o.partner_id.ward_id, o.partner_id.township_id, o.partner_id.city, o.partner_id.state_id]"/>-->
+
+                            <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
+                            <t t-foreach="existing_parts" t-as="part">
+                                <span t-esc="part"/>
+                                <t t-if="not part_last">,</t>
+                            </t>
+                            <br/>
+                            <span t-field="o.partner_id.phone"/>
+                        </td>
+                    </tr>
+                    <tr style="height:50px;"/>
+                    <tr style="height:280px;">
+                        <td style="border:3px solid black;text-align:center;vertical-align:middle;font-size:30px;width:49%;font-weight:bold;">
+                            ရေမစိုရ ၊ ပစ်မချရ ၊
+                            <br/>
+                            <br/>
+                            မဖိရ ၊ ကွဲတတ်သည်။
+                        </td>
+                        <td style="width:2%;border:none;"/>
+                        <td style="border:3px solid black;text-align:center;vertical-align:middle;font-size:30px;width:49%;font-weight:bold;">
+                            မှ ပဒေသာ
+                            <br/>
+                            <span style="font-size:20px;" t-field="o.company_id.street"/>
+                            <br/>
+                            <span t-field="o.company_id.city"/>
+                            <br/>
+                            <t t-if="o.company_id.phone">
+                                <span t-field="o.company_id.phone"/>
+                                <br/>
+                            </t>
+                            <t t-if="o.company_id.mobile">
+                                <span t-field="o.company_id.mobile"/>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </template>
+
+
+
+<!--        =============================SALE AND PURCHASE ADDRESS PRINT=======================================-->
+<!--        ===================================PARTNER ADDRESS PRINT=======================================-->
+
+
+        <template id="address_print_template_for_partner">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="padetha_reports.address_print_detail_template_for_partner"/>
+                        <br/>
+                        <hr style="border-bottom:2px dashed black; height:1%;"/>
+                        <br/>
+                        <t t-call="padetha_reports.address_print_detail_template_for_partner"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="address_print_detail_template_for_partner">
+            <div style="height:630px;">
+
+                <table border="0" style="width:100%;border:none;">
+                    <tr style="height:280px;">
+                        <td colspan="3"
+                            style="border:3px solid black;text-align:center;vertical-align:middle;font-size:30px;">
+                            <span t-field="o.name"/>
+                            <br/>
+                            <span t-field="o.street"/>
+                            <br/>
+                            <t t-set="address_parts"
+                               t-value="[o.city, o.state_id.name]"/>
+                            <!--                           t-value="[o.ward_id.name, o.township_id.name, o.city, o.state_id.name]"/>-->
+
+                            <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
+                            <t t-foreach="existing_parts" t-as="part">
+                                <span t-esc="part"/>
+                                <t t-if="not part_last">,</t>
+                            </t>
+                            <br/>
+                            <span t-field="o.phone"/>
+                        </td>
+                    </tr>
+                    <tr style="height:50px;"/>
+                    <tr style="height:280px;">
+                        <td style="border:3px solid black;text-align:center;vertical-align:middle;font-size:30px;width:49%;font-weight:bold;">
+                            ရေမစိုရ ၊ ပစ်မချရ ၊
+                            <br/>
+                            <br/>
+                            မဖိရ ၊ ကွဲတတ်သည်။
+                        </td>
+                        <td style="width:2%;border:none;"/>
+                        <td style="border:3px solid black;text-align:center;vertical-align:middle;font-size:30px;width:49%;font-weight:bold;">
+                            မှ ပဒေသာ
+                            <br/>
+                            <span style="font-size:20px;" t-field="o.company_id.street"/>
+                            <br/>
+                            <span t-field="o.company_id.city"/>
+                            <br/>
+                            <t t-if="o.company_id.phone">
+                                <span t-field="o.company_id.phone"/>
+                                <br/>
+                            </t>
+                            <t t-if="o.company_id.mobile">
+                                <span t-field="o.company_id.mobile"/>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </template>
+
+    </data>
+</odoo>

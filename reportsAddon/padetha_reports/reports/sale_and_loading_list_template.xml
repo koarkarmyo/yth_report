@@ -88,13 +88,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                       <td colspan="3">
+                            <t t-if="o.remark">
+                                <strong>Remark: </strong><span style="font-weight:bold;font-size:18px;padding-left:20px;" t-field="o.remark"/>
+                           </t>
                         </td>
                         <td>
-                        </td>
-                        <td/>
-                        <td>
-                            <strong>Total Weight</strong>
+                            <strong>Total Weight (Kg)</strong>
                         </td>
                         <td>
                             <span>: </span>
@@ -102,9 +102,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td/>
-                        <td/>
-                        <td/>
+                          <td colspan="3">
+                            <t t-if="o.description">
+                                <strong>Description:</strong><span style="font-weight:bold;font-size:18px;" t-field="o.description"/>
+                            </t>
+                        </td>
                         <td>
                             <strong>Total Volume</strong>
                         </td>
@@ -188,6 +190,13 @@
                                 </td>
                                 <td/>
                             </tr>
+                            <t t-if="order.remark">
+                                <tr style="border-bottom:1px solid lightgray;">
+                                    <td colspan="8">
+                                        <span style="font-weight:bold;" t-field="order.remark"/>
+                                    </td>
+                                </tr>
+                            </t>
                         </t>
                         <tr style="border-top: 2px solid black;">
                             <td colspan="6" class="text-end">

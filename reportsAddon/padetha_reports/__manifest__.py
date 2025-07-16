@@ -15,6 +15,8 @@
         'reports/purchase_quotation_customize_report_template.xml',
         'reports/purchase_order_with_photo_template.xml',
         'reports/sale_and_loading_list_template.xml',
+        'reports/address_print_template.xml',
+        'reports/pan_sar_template.xml',
     ],
     'installable': True,
     'application': False,

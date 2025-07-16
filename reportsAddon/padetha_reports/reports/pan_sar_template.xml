@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-        <template id="report_customize_purchase_order">
+        <template id="pan_sar_template">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.basic_layout">
                     <p class="header">
@@ -10,7 +10,11 @@
                                 <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
                                      style="width:120px;" alt="Logo"/>
                             </div>
-                            <div class="col-6"/>
+                            <div class="col-6">
+                                <span style="font-weight:bold;font-size:20px;padding-left:100px;">Date:
+                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %I:%M %p')"/>
+                                </span>
+                            </div>
                         </div>
                         <div class="row col-12">
                             <div class="col-6">
@@ -50,14 +54,16 @@
                                 </t>
                                 <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
                                 </span>
-                                <!--                                    <span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,-->
-                                <!--                                    </span>-->
+                                <!--<span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,-->
+                                <!--</span>-->
                                 <br/>
                                 <t t-set="address_parts"
-                                   t-value="[doc.partner_id.ward_id, doc.partner_id.township_id, doc.partner_id.city, doc.partner_id.state_id]"/>
+                                   t-value="[doc.partner_id.city, doc.partner_id.state_id.name]"/>
+                                <!--                           t-value="[doc.partner_id.ward_id.name, doc.partner_id.township_id.name, doc.partner_id.city, doc.state_id.name]"/>-->
+
                                 <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
                                 <t t-foreach="existing_parts" t-as="part">
-                                    <span t-field="part.name"/>
+                                    <span t-esc="part"/>
                                     <t t-if="not part_last">,</t>
                                 </t>
 
@@ -66,55 +72,17 @@
                         <br/>
 
 
-                        <table style="width:100%;" class="table table-sm table-borderless">
-                            <tr>
-                                <td style="font-size:17px;font-weight:bold;">
-                                    Purchase Representative
-                                </td>
-                                <td style="font-size:17px;font-weight:bold;">
-                                    Vendor Reference
-                                </td>
-                                <td style="font-size:17px;font-weight:bold;">
-                                    Order Date
-                                </td>
-                                <td style="font-size:17px;font-weight:bold;">
-                                    Delivery Location
-                                </td>
+                        <span>
+                            <span style="font-size:24px;" t-field="doc.name"/>
+                        </span>
+                        <span style="float:right;">Order Date:
+                            <span t-field="doc.date_order"/>
+                        </span>
 
-                            </tr>
-                            <tr>
-                                <td>
-                                    <!--                                    <span t-field="doc.mmt_employee_id"/>-->
-                                    <!--                                    <br/>-->
-                                    <!--                                    <span t-field="doc.mmt_employee_id.mobile_phone"/>-->
-                                    <!--                                    <br/>-->
-                                    <!--                                    <span t-field="doc.mmt_employee_id.work_email"/>-->
-                                </td>
-                                <td>
-                                    <span t-field="doc.partner_ref"/>
-                                </td>
-                                <td>
-                                    <t t-if="doc.state == 'draft'">
-                                        <span t-if="doc.date_order" t-field="doc.date_order"/>
-                                    </t>
-                                    <span t-field="doc.date_approve"/>
-                                </td>
-                                <td>
-                                    <span t-field="doc.picking_ids.location_dest_id"/>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <h4>
-                            <span t-if="doc.state in ['draft','purchase', 'done']">Purchase Order #
-                                <span t-field="doc.name"/>
-                            </span>
-
-                        </h4>
 
                     </p>
                     <div class="page">
-                        <t t-call="padetha_reports.po_customize_body_template" t-lang="doc.partner_id.lang"/>
+                        <t t-call="padetha_reports.sale_pansar_body_template" t-lang="doc.partner_id.lang"/>
                     </div>
                     <br/>
                     <br/>
@@ -130,37 +98,20 @@
                                 <span style="font-weight:bold;">Internal Note:</span>
                                 <span t-field="doc.partner_id.comment"/>
                             </t>
-                            <t t-if="doc.notes">
+                            <t t-if="doc.note">
                                 <span style="font-weight:bold;">Terms &amp; Condition</span>
-                                <span t-field="doc.notes"/>
+                                <span t-field="doc.note"/>
                             </t>
 
                         </div>
                         <div class="col-6">
-                            <span style="padding-right:30px;">Supplier Sign</span>
-                            <span style="padding-right:30px;">Checker Sign</span>
-                            <span style="padding-right:30px;">Customer Sign</span>
+                            <span style="padding-right:30px;float:right;">Customer Sign</span>
 
                         </div>
 
 
                     </div>
-                    <div class="footer">
-                        <div class="container">
-                            <div class="row mb-3">
-                                <div class="col-6 text-end">
-                                    <span>Page :</span>
-                                    <span class="page"/>/
-                                    <span class="topage"/>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <span>Print Date:
-                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <p style="page-break-after:always;"/>
 
@@ -169,8 +120,8 @@
         </template>
 
 
-        <template id="po_customize_body_template">
-            <table class="table table-sm o_main_table table-borderless" style="width:100%;">
+        <template id="sale_pansar_body_template">
+            <table class="table table-sm o_main_table table-borderless" style="width:100%;font-size:20px;">
                 <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
                 <thead>
@@ -179,19 +130,17 @@
                         <th>Description</th>
                         <th class="text-center">UoMC</th>
                         <th class="text-center">Qty</th>
-                        <th class="text-center">Unit Price</th>
                         <t t-if="dis_line &gt; 0">
                             <th class="text-center" name="dis">Dis%</th>
                             <t t-set="dis_val" t-value="True"/>
                         </t>
-                        <th class="text-end">Sub Total</th>
+                        <th></th>
+
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     <t t-set="index" t-value="1"/>
-                    <t t-set="current_subtotal" t-value="0"/>
                     <t t-foreach="doc.order_line" t-as="line">
-                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
                         <tr style="border-bottom:1px solid lightgray;">
                             <td>
                                 <span t-esc="index"/>
@@ -200,38 +149,24 @@
                                 <span t-field="line.name"/>
                             </td>
                             <td style="text-align:center;">
-                                <span t-field="line.product_id.uom_category_id.name"/>
+                                <!--                                <span t-field="line.product_id.uom_category_id.name"/>-->
+                                <!--                                <span t-field="line.product_id.uom_category_id.name"/>-->
                             </td>
                             <td class="text-center">
-                                <span t-field="line.product_qty" t-options="{'widget': 'integer'}"/>
+                                <span t-field="line.product_uom_qty" t-options="{'widget': 'integer'}"/>
                                 <span t-field="line.product_uom.name" groups="uom.group_uom"/>
                             </td>
-                            <td class="text-center">
-                                <span t-field="line.price_unit" t-options="{'widget': 'integer'}"/>
+                            <td style="width:8%">
+                               <img t-att-src="'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD8AAABCCAYAAADg4w7AAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAADvSURBVHhe7ds7CsJAGEXhOxmMtUjsFCws7HQzgmAj4gJE7F2MILgRX7vQTtcQYqH4IhvQc085k+b7h0w3od3pFvrzYoxazGeaTsYKIbzWa/Vs+fHlH1YUhba7vdJKRf1+T0mSSBS8HgPYHY6qpulzABi8SgaAwuttAJIUCBdeWTFG3f98YHmec/GSjMdWeuG1Wk1t1is1sux76ye7XK8aDEc6nc4f6+iTN56a8dSMp2Y8NeOpGU/NeGrGUzOemvHUjKdmPDXjqRlPzXhqxlMznprx1IynZjw146kZT814asZTM54aGl/6wIgS+uTR+BttPC8KpMveCwAAAABJRU5ErkJggg=='" style="width:25px; height:auto;"/>
                             </td>
-                            <t t-if="dis_val == True">
-                                <td class="text-center">
-                                    <span t-field="line.discount"/>
-                                </td>
-                            </t>
-                            <td class="text-end">
-                                <span t-field="line.price_subtotal"
-                                      t-options="{&quot;widget&quot;: &quot;integer&quot;, &quot;display_currency&quot;: doc.currency_id,}"/>
-                            </td>
+
+
                         </tr>
 
 
                         <t t-set="index" t-value="index + 1"/>
                     </t>
-                    <tr>
-                        <td colspan="5" style="text-align:right">
-                            Total
-                        </td>
-                        <td colspan="2" style="text-align:right;">
-                            <span t-esc="current_subtotal"
-                                  t-options="{&quot;widget&quot;: &quot;integer&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
 
