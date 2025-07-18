@@ -264,6 +264,10 @@
                 <!-- Page Footer: Only appears on the very last page -->
                 <div t-if="current_page == (total_page - 1)" class="row mt-4">
                     <div class="col-6">
+                        <t t-foreach="doc.tag_ids" t-as="tag">
+                            <span style="border:1px solid black;border-radius:5px;background-color:black;color:white;margin:3px;" t-esc="tag.name"/>
+                        </t>
+                        <br/><br/>
                         <t t-if="doc.remark">
                             <strong>Remark:</strong>
                             <span t-field="doc.remark"/>
