@@ -40,7 +40,7 @@ class PurchaseWithPhoto(models.AbstractModel):
         }
 
 class PurchaseAddressPrint(models.AbstractModel):
-    _name = 'report.padetha_reports.address_print_template_for_po'
+    _name = 'report.padetha_reports.address_print_template'
     _description = 'Purchase With Photo Report'
 
     @api.model

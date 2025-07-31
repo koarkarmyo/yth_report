@@ -38,3 +38,16 @@ class SalesPanSar(models.AbstractModel):
             'doc_model': 'sale.order',
             'docs': docs,
         }
+
+class DraftVoucherReport(models.AbstractModel):
+    _name = 'report.padetha_reports.draft_voucher_report_template'
+    _description = 'Draft Voucher Report'
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        docs = self.env['sale.order'].browse(docids)
+        return {
+            'doc_ids': docids,
+            'doc_model': 'sale.order',
+            'docs': docs,
+        }

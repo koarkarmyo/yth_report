@@ -2,16 +2,19 @@
 <odoo>
     <data>
         <template id="pan_sar_template">
-            <t t-foreach="docs" t-as="doc">
+           <t t-foreach="docs" t-as="doc">
                 <t t-call="web.basic_layout">
                     <p class="header">
                         <div class="row col-12">
-                            <div class="col-6">
-                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
-                                     style="width:120px;" alt="Logo"/>
+                            <div class="col-4">
+                                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="width:120px;" alt="Logo"/>
                             </div>
-                            <div class="col-6">
-                                <span style="font-weight:bold;font-size:20px;padding-left:100px;">Date:
+                             <div class="col-4 mt-2">
+                                <span style="font-weight:bold;font-size:30px;padding-left:50px;"><span style="background-color:black;color:white;border-radius:5px;padding:0px 5px;">Pan Sar</span></span>
+                            </div>
+                            <div class="col-4">
+
+                                <span style="font-weight:bold;font-size:20px;">Date:
                                     <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %I:%M %p')"/>
                                 </span>
                             </div>
@@ -52,13 +55,13 @@
                                     <span t-field="doc.partner_id.phone"/>
                                     <br/>
                                 </t>
-                                <span t-if="doc.partner_id.street" t-field="doc.partner_id.street">,
-                                </span>
-                                <!--<span t-if="doc.partner_id.street2" t-field="doc.partner_id.street2">,-->
-                                <!--</span>-->
-                                <br/>
-                                <t t-set="address_parts"
-                                   t-value="[doc.partner_id.city, doc.partner_id.state_id.name]"/>
+                                <t t-if="doc.partner_id.street">
+                                    <span t-field="doc.partner_id.street">
+                                    </span>
+                                    <br/>
+                                </t>
+
+                                <t t-set="address_parts" t-value="[doc.partner_id.ward_id.name, doc.partner_id.township_id.name, doc.partner_id.state_id.name]"/>
                                 <!--                           t-value="[doc.partner_id.ward_id.name, doc.partner_id.township_id.name, doc.partner_id.city, doc.state_id.name]"/>-->
 
                                 <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
@@ -69,15 +72,25 @@
 
                             </div>
                         </div>
-                        <br/>
 
-
-                        <span>
-                            <span style="font-size:24px;" t-field="doc.name"/>
-                        </span>
-                        <span style="float:right;">Order Date:
-                            <span t-field="doc.date_order"/>
-                        </span>
+                            <table style="width:60%;" class="table table-sm table-borderless">
+                                <tr>
+                                    <td style="font-size:17px;font-weight:bold;">Order No</td>
+                                    <td style="font-size:17px;font-weight:bold;">Sales Man</td>
+                                    <td style="font-size:17px;font-weight:bold;">Order Date</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-field="doc.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.employee_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-if="doc.date_order" t-field="doc.date_order"/>
+                                    </td>
+                                </tr>
+                            </table>
 
 
                     </p>
@@ -105,8 +118,7 @@
 
                         </div>
                         <div class="col-6">
-                            <span style="padding-right:30px;float:right;">Customer Sign</span>
-
+                            <span style="padding-left:270px;">Customer Sign</span>
                         </div>
 
 
@@ -121,6 +133,11 @@
 
 
         <template id="sale_pansar_body_template">
+            <style>
+        th{
+        font-weight:bold;
+        }
+    </style>
             <table class="table table-sm o_main_table table-borderless" style="width:100%;font-size:20px;">
                 <t t-set="dis_line" t-value="doc.is_discount_line(doc.order_line)"/>
                 <t t-set="dis_val" t-value="False"/>
@@ -129,16 +146,16 @@
                         <th>No.</th>
                         <th>Description</th>
                         <th class="text-center">UoMC</th>
-                        <th class="text-center">Qty</th>
+                        <th class="text-start" colspan="2">Qty</th>
                         <t t-if="dis_line &gt; 0">
                             <th class="text-center" name="dis">Dis%</th>
                             <t t-set="dis_val" t-value="True"/>
                         </t>
-                        <th></th>
+                        <th/>
 
                     </tr>
                 </thead>
-                <tbody >
+                <tbody>
                     <t t-set="index" t-value="1"/>
                     <t t-foreach="doc.order_line" t-as="line">
                         <tr style="border-bottom:1px solid lightgray;">
@@ -149,11 +166,12 @@
                                 <span t-field="line.name"/>
                             </td>
                             <td style="text-align:center;">
-                                <!--                                <span t-field="line.product_id.uom_category_id.name"/>-->
-                                <!--                                <span t-field="line.product_id.uom_category_id.name"/>-->
+                                <span t-field="line.product_id.uom_category_id.name"/>
                             </td>
-                            <td class="text-center">
+                            <td style="width:2%;" class="text-end">
                                 <span t-field="line.product_uom_qty" t-options="{'widget': 'integer'}"/>
+                            </td>
+                            <td style="text-start">
                                 <span t-field="line.product_uom.name" groups="uom.group_uom"/>
                             </td>
                             <td style="width:8%">
@@ -169,7 +187,6 @@
 
                 </tbody>
             </table>
-
         </template>
     </data>
 </odoo>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-    <!--Batch Report Paper Format-->
+        <!--Batch Report Paper Format-->
         <record id="a5_voucher_paper_format" model="report.paperformat">
             <field name="name">Batch Report Paper Format</field>
             <field name="default" eval="False"/>
@@ -15,7 +15,7 @@
         </record>
 
 
-<!--        Sales Customize Report Paper Format-->
+        <!--        Sales Customize Report Paper Format-->
         <record id="sales_customize_format" model="report.paperformat">
             <field name="name">Sales Customize Report</field>
             <field name="default" eval="False"/>
@@ -27,7 +27,7 @@
             <field name="margin_right">5</field>
             <field name="dpi">90</field>
         </record>
-          <record id="address_print_format" model="report.paperformat">
+        <record id="address_print_format" model="report.paperformat">
             <field name="name">Sales Customize Report</field>
             <field name="default" eval="False"/>
             <field name="format">A4</field>
@@ -39,7 +39,7 @@
             <field name="dpi">90</field>
         </record>
 
-<!--        SO with Photo Paper Format-->
+        <!--        SO with Photo Paper Format-->
         <record id="so_with_photo_format" model="report.paperformat">
             <field name="name">SO with Photo</field>
             <field name="default" eval="False"/>
@@ -52,7 +52,7 @@
             <field name="dpi">90</field>
         </record>
 
-<!--        A5 Voucher-->
+        <!--        A5 Voucher-->
         <record id="action_sale_a5_voucher" model="ir.actions.report">
             <field name="name">A5 Voucher</field>
             <field name="model">sale.order</field>
@@ -65,7 +65,35 @@
             <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
         </record>
 
-<!--        Sales Voucher Print-->
+        <record id="action_delivery_transfer_report" model="ir.actions.report">
+            <field name="name">Transfer Report</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.transfer_report_template</field>
+            <field name="report_file">padetha_reports.transfer_report_template</field>
+            <field name="print_report_name">'Transfer Report - %s - %s' % (object.partner_id.name or '', object.name)
+            </field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.sales_customize_format"/>
+        </record>
+
+
+
+         <record id="action_delivery_return_report" model="ir.actions.report">
+            <field name="name">Delivery Return</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.delivery_return_report_template</field>
+            <field name="report_file">padetha_reports.delivery_return_report_template</field>
+            <field name="print_report_name">'Delivery Return - %s - %s' % (object.partner_id.name or '', object.name)
+            </field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.sales_customize_format"/>
+        </record>
+
+        <!--        Sales Voucher Print-->
         <record id="spb_action_sale_a5_voucher" model="ir.actions.report">
             <field name="name">Sales Voucher Print</field>
             <field name="model">stock.picking.batch</field>
@@ -78,7 +106,7 @@
             <field name="paperformat_id" ref="padetha_reports.a5_voucher_paper_format"/>
         </record>
 
-<!--        Address Print for sale order-->
+        <!--        Address Print for sale order-->
         <record id="address_print_action" model="ir.actions.report">
             <field name="name">Address Print</field>
             <field name="model">sale.order</field>
@@ -86,6 +114,18 @@
             <field name="report_name">padetha_reports.address_print_template</field>
             <field name="report_file">padetha_reports.address_print_template</field>
             <field name="print_report_name">'AddressPrint'</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
+        </record>
+
+          <record id="draft_voucher_report_action" model="ir.actions.report">
+            <field name="name">Draft Voucher Report</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.draft_voucher_report_template</field>
+            <field name="report_file">padetha_reports.draft_voucher_report_template</field>
+            <field name="print_report_name">'Draft Voucher Report'</field>
             <field name="binding_model_id" ref="sale.model_sale_order"/>
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
@@ -105,21 +145,21 @@
             <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
         </record>
 
-          <!--        Address Print for Partner-->
+        <!--        Address Print for Partner-->
         <record id="address_print_action_for_partner" model="ir.actions.report">
             <field name="name">Address Print</field>
             <field name="model">res.partner</field>
             <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.address_print_template_for_partner</field>
             <field name="report_file">padetha_reports.address_print_template_for_partner</field>
-            <field name="print_report_name">'AddressPrint'</field>
+            <field name="print_report_name">'AddressPrint_%s' % (object.name)</field>
             <field name="binding_model_id" ref="base.model_res_partner"/>
             <field name="binding_type">report</field>
             <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
         </record>
 
-         <!--       Sale Pan Sar-->
-        <record id="address_print_action_for_po" model="ir.actions.report">
+        <!--       Sale Pan Sar-->
+        <record id="action_pan_sar_template" model="ir.actions.report">
             <field name="name">Pan Sar</field>
             <field name="model">sale.order</field>
             <field name="report_type">qweb-html</field>
@@ -131,7 +171,7 @@
             <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
         </record>
 
-<!--        Summary_and_loading_list_template-->
+        <!--        Summary_and_loading_list_template-->
         <record id="sale_and_loading_list_voucher" model="ir.actions.report">
             <field name="name">Summary and Loading List</field>
             <field name="model">stock.picking.batch</field>
@@ -157,7 +197,7 @@
             <field name="paperformat_id" ref="padetha_reports.sales_customize_format"/>
         </record>
 
-<!--        Sales Order With Photo-->
+        <!--        Sales Order With Photo-->
         <record id="action_sales_order_with_photo_report" model="ir.actions.report">
             <field name="name">Sales Order With Photo</field>
             <field name="model">sale.order</field>
@@ -170,7 +210,7 @@
             <field name="paperformat_id" ref="padetha_reports.so_with_photo_format"/>
         </record>
 
-<!--        Purchase Order Customize Report -->
+        <!--        Purchase Order Customize Report -->
         <record id="action_purchase_order_report" model="ir.actions.report">
             <field name="name">Purchase Order (Customize)</field>
             <field name="model">purchase.order</field>

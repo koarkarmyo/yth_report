@@ -24,3 +24,10 @@ class SaleOrder(models.Model):
         now_utc = datetime.now(pytz.utc)
         now_myanmar = now_utc.astimezone(myanmar_tz)
         return now_myanmar.strftime('%d/%m/%Y %H:%M:%S')
+
+    def get_total_sku_count_for_draft_voucher(self, order_lines):
+        products = []
+        for line in order_lines:
+            if not line.product_id.name in products:
+                products.append(line.product_id.name)
+        return len(products)

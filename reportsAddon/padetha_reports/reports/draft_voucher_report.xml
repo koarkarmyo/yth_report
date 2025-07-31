@@ -1,0 +1,301 @@
+<odoo>
+    <data>
+        <template id="draft_voucher_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-call="padetha_reports.draft_loading_summary_template"/>
+                    <p style="page-break-after: always;"/>
+                    <t t-call="padetha_reports.draft_loading_list_template"/>
+                    <p style="page-break-after: always;"/>
+                    <div style="text-align:center;">
+                        <h3>Customer Voucher</h3>
+                    </div>
+                    <t t-foreach="docs" t-as="o">
+
+
+                        <table style="width:80%" border="0" class="table table-borderless table-sm">
+                            <tr>
+                                <td>
+                                    <span style="font-size:25px;font-weight:bold;">Sale Order :
+                                        <span t-field="o.name"/>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="font-size:25px;font-weight:bold;">Customer Name :
+                                        <span t-field="o.partner_id.name"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table border="0" class="table table-borderless table-sm">
+                            <tr style="border-bottom:2px solid black;">
+                                <th>No</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th class="text-end">Unit Price</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                            <t t-set="total_amount" t-value="0"/>
+                            <t t-foreach="o.order_line" t-as="line">
+                                <tr style="border-bottom:1px solid lightgray;">
+                                    <t t-set="line_index" t-value="line_index + 1"/>
+                                    <td>
+                                        <span t-esc="line_index"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.product_uom_qty" t-options="{'widget':'integer'}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="line.price_unit" t-options="{'widget':'integer'}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="line.price_subtotal"/>
+                                    </td>
+                                </tr>
+                                <t t-set="total_amount" t-value="total_amount + line.price_subtotal"/>
+                            </t>
+                            <tr style="border-top:2px solid black;">
+                                <td colspan="4">
+                                    <span style="float:right;font-weight:bold;font-size:20px;">Total</span>
+                                </td>
+                                <td>
+                                    <span style="float:right;font-weight:bold;font-size:20px;" t-esc="total_amount"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <br/>
+                    </t>
+
+
+                </t>
+            </t>
+        </template>
+
+        <template id="draft_loading_summary_template">
+            <div class="page">
+                <div class="row mt-4 mb-5">
+                    <div class="col-12 text-center">
+                        <h2>Draft Delivery Summary</h2>
+                    </div>
+                </div>
+
+
+                <table style="width: 100%;" class="table table-borderless table-sm">
+                    <tbody>
+                        <tr style="height:12px;">
+                            <t t-set="entire_total_amount" t-value="0"/>
+                            <t t-set="voucher_count" t-value="0"/>
+                            <t t-foreach="docs" t-as="dds">
+                                <t t-set="entire_total_amount" t-value="entire_total_amount + int(dds.amount_total)"/>
+                                <t t-set="voucher_count" t-value="voucher_count + 1"/>
+                            </t>
+                            <td style="width: 20%;">
+                                <strong>Total Amount</strong>
+                            </td>
+                            <td>
+                                <span>:</span>
+                                <span t-esc="entire_total_amount"/>
+                            </td>
+                            <td style="width:30%;"/>
+                            <td>
+                                <strong>Total Weight (Kg) :</strong>
+                            </td>
+                            <td>
+                                <span></span>
+                                <!--                            <span t-field="o.total_weight" t-options="{'widget':'integer'}"/>-->
+                            </td>
+                        </tr>
+
+                        <tr style="height:30px;">
+                            <td>
+                                <strong>Voucher Count</strong>
+                            </td>
+                            <td>
+                                <span>:</span>
+                                <span t-esc="voucher_count"/>
+                            </td>
+                            <td/>
+                            <td>
+                                <strong>Total Volume :</strong>
+                            </td>
+                            <td>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>SKU Count</strong>
+                            </td>
+                            <td>
+                                <t t-foreach="docs" t-as="doc">
+                                     <t t-set="sku_count" t-value="doc.get_total_sku_count_for_draft_voucher(docs.mapped('order_line'))"/>
+
+                                </t>
+
+
+                                <span>:</span>
+                                <span t-esc="sku_count"/>
+                            </td>
+                            <td/>
+                            <td/>
+                            <td/>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+                <br/>
+                <table class="table table-sm o_main_table table-borderless">
+                    <thead>
+                        <tr style="border-bottom:2px solid black;">
+                            <th style="text-align:center;vertical-align:middle;font-weight:bold;">No.</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Order No</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Customer<br/>Phone No.
+                            </th>
+                            <th style="vertical-align:middle;font-weight:bold;">Ward</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Township</th>
+                            <th style="vertical-align:middle;font-weight:bold;">Sale Man</th>
+                            <th style="vertical-align:middle;font-weight:bold;" class="text-end">Amount</th>
+                            <th style="vertical-align:middle;width:20%;font-weight:bold;">Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="total_amount" t-value="0"/>
+                        <t t-set="order_index" t-value="1"/>
+                        <t t-foreach="docs" t-as="dds">
+                            <t t-set="total_amount" t-value="total_amount + int(dds.amount_total)"/>
+
+                            <tr style="border-bottom:1px solid lightgray;">
+                                <td>
+                                    <span t-esc="order_index"/>
+                                </td>
+                                <td>
+                                    <span t-field="dds.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="dds.partner_id.name"/>
+                                    <br/>
+                                    <span t-field="dds.partner_id.phone"/>
+
+                                </td>
+                                <td>
+                                    <!--                                    <span t-field="o.partner_id.ward_id"/>-->
+                                </td>
+                                <td>
+                                    <!--                                    <span t-field="o.partner_id.township_id"/>-->
+                                </td>
+                                <td>
+                                    <!--                                    <span t-esc="o.employee_id.name"/>-->
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="int(dds.amount_total)"/>
+                                </td>
+                                <td/>
+                            </tr>
+                            <t t-set="order_index" t-value="order_index + 1"/>
+                        </t>
+
+                        <tr style="border-top: 2px solid black;">
+                            <td colspan="6" class="text-end">
+                                <strong>Total Amount :</strong>
+                            </td>
+                            <td class="text-end">
+                                <span t-esc="total_amount"/>
+                            </td>
+                            <td/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+        <template id="draft_loading_list_template">
+            <t t-set="product_totals" t-value="{}"/>
+            <t t-foreach="docs.mapped('order_line')" t-as="line">
+                <t t-if="line.product_id and not line.display_type">
+                    <t t-set="product_id" t-value="line.product_id.id"/>
+                    <t t-set="current_totals"
+                       t-value="product_totals.get(product_id, {'product_uom_qty': 0, 'price_unit': 0, 'price_subtotal': 0, 'name': line.product_id.name})"/>
+
+                    <t t-set="new_quantity" t-value="current_totals['product_uom_qty'] + line.product_uom_qty"/>
+                    <!--        <t t-set="new_price_unit" t-value="current_totals['price_unit'] + line.price_unit"/>-->
+                    <t t-set="new_price_subtotal"
+                       t-value="current_totals['price_subtotal'] + line.price_subtotal"/>
+                    <t t-set="dummy" t-value="product_totals.update({
+            product_id: {
+                'product_id':line.product_id,
+                'name': current_totals['name'],
+                'product_uom_qty': new_quantity,
+                'price_subtotal': new_price_subtotal
+            }
+        })"/>
+
+                </t>
+            </t>
+            <!--............................-->
+            <div class="page">
+                <div style="text-align:center;">
+                    <h3>Draft Loading List</h3>
+                </div>
+
+                <table border="0" class="table table-sm table-borderless o_main_table">
+                    <thead>
+                        <tr style="border-bottom:2px solid black;">
+                            <th name="th_no">
+                                <strong>No.</strong>
+                            </th>
+                            <th name="th_product">
+                                <strong>Product</strong>
+                            </th>
+                            <th name="th_quantity" class="text-end">
+                                <strong>Quantity</strong>
+                            </th>
+                            <!--                <th name="th_price_unit" class="text-right"><strong>Sum of Unit Price</strong></th>-->
+                            <th name="th_price_subtotal" class="text-end">
+                                <strong>Loading Quantity</strong>
+                            </th>
+                            <th style="width:35%;" name="th_remark" class="text-start">
+                                <strong>Remark</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <t t-foreach="list(product_totals.values())" t-as="data">
+                            <t t-set="data_index" t-value="data_index + 1"/>
+
+                            <tr style="border-bottom:1px solid lightgray;">
+                                <td>
+                                    <span t-esc="data_index"/>
+                                </td>
+                                <td>
+                                    <span t-esc="data['name']"/>
+                                </td>
+                                <td class="text-end">
+                                    <span t-esc="data['product_uom_qty']" t-options="{'widget':'integer'}"/>
+                                </td>
+                                <!--                                        <td class="text-right">-->
+                                <!--                                            <span t-esc="data['price_unit']"-->
+                                <!--                                                  t-options='{"widget": "monetary", "display_currency": docs[0].currency_id}'/>-->
+                                <!--                                        </td>-->
+                                <td class="text-end">
+                                    <!--                                            <t t-set="ld_qty" t-value="data['product_id']._get_multi_uom_long_form(data['product_uom_qty'])"/>-->
+
+                                    <span t-esc="data['product_id'].name"/>
+<!--                                     t-options='{"widget": "integer", "display_currency": docs[0].currency_id}'/>-->
+                                </td>
+                                <td/>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+            </div>
+        </template>
+    </data>
+</odoo>

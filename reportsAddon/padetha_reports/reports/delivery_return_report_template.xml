@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="delivery_return_report_template">
+
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-call="padetha_reports.return_customer_list_template"/>
+                    <p style="page-break-after: always;"/>
+                    <t t-call="padetha_reports.product_detail_return_list_template"/>
+                    <p style="page-break-after: always;"/>
+                    <t t-call="padetha_reports.return_list_summary_template"/>
+
+                </div>
+            </t>
+        </template>
+
+        <template id="return_customer_list_template">
+            <div style="text-align:center;">
+                <h3>Return Customer List</h3>
+            </div>
+            <table class="table table-sm o_main_table table-borderless">
+                <thead>
+                    <tr style="border-bottom:2px solid black;">
+                        <th style="text-align:center;vertical-align:middle;font-weight:bold;">No.</th>
+                        <th style="vertical-align:middle;font-weight:bold;">Order No</th>
+                        <th style="vertical-align:middle;font-weight:bold;">Customer<br/>Phone No.
+                        </th>
+                        <th style="vertical-align:middle;font-weight:bold;">Ward</th>
+                        <th style="vertical-align:middle;font-weight:bold;">Township</th>
+                        <th style="vertical-align:middle;font-weight:bold;">Sale Man</th>
+                        <th style="vertical-align:middle;font-weight:bold;" class="text-end">Amount</th>
+                        <th style="vertical-align:middle;width:20%;font-weight:bold;">Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="total_amount" t-value="0"/>
+                    <t t-set="order_index" t-value="1"/>
+                    <t t-foreach="docs" t-as="pick">
+                        <t t-set="total_amount" t-value="total_amount + int(pick.sale_id.amount_total)"/>
+
+                        <tr style="border-bottom:1px solid lightgray;">
+                            <td>
+                                <span t-esc="order_index"/>
+                            </td>
+                            <td>
+                                <span t-field="pick.sale_id.name"/>
+                            </td>
+                            <td>
+                                <span t-field="pick.sale_id.partner_id.name"/>
+                                <br/>
+                                <span t-field="pick.sale_id.partner_id.phone"/>
+
+                            </td>
+                            <td>
+                                <!--                                    <span t-field="pick.sale_id.partner_id.ward_id"/>-->
+                            </td>
+                            <td>
+                                <!--                                    <span t-field="pick.sale_id.partner_id.township_id"/>-->
+                            </td>
+                            <td>
+                                <!--                                    <span t-esc="pick.sale_id.employee_id.name"/>-->
+                            </td>
+                            <td class="text-end">
+                                <span t-esc="int(pick.sale_id.amount_total)"/>
+                            </td>
+                            <td/>
+                        </tr>
+                        <t t-set="order_index" t-value="order_index + 1"/>
+                    </t>
+
+                    <tr style="border-top: 2px solid black;">
+                        <td colspan="6" class="text-end">
+                            <strong>Total Amount :</strong>
+                        </td>
+                        <td class="text-end">
+                            <span t-esc="total_amount"/>
+                        </td>
+                        <td/>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template id="product_detail_return_list_template">
+            <style>
+                .tb_header{
+                font-weight:bold;
+                }
+
+            </style>
+            <div class="text-center">
+                <h3>Product Return List Detail</h3>
+                <br/>
+
+                <table class="table table-borderless" style="width:100%;">
+                    <tr style="border-bottom:2px solid black;">
+                        <td class="text-end tb_header">No.</td>
+                        <td class="text-start tb_header">Customer Name</td>
+                        <td class="text-start tb_header">Source Document</td>
+                        <td class="text-start tb_header">Product</td>
+                        <td class="text-end tb_header">Return Qty</td>
+                    </tr>
+                    <t t-foreach="docs" t-as="pick">
+                        <t t-set="is_first_line" t-value="True"/>
+                        <t t-foreach="pick.move_ids" t-as="line">
+                            <tr style="border-bottom:1px solid lightgray;">
+                                <td class="text-end">
+                                    <t t-if="is_first_line">
+                                        <span class="text-end" t-esc="pick_index + 1"/>
+                                    </t>
+                                </td>
+
+                                <td class="text-start">
+                                    <t t-if="is_first_line">
+                                        <span t-field="pick.partner_id.name"/>
+                                    </t>
+                                </td>
+
+                                <td class="text-start">
+                                    <t t-if="is_first_line">
+                                        <span t-field="pick.sale_id.name"/>
+                                    </t>
+                                </td>
+
+                                <td class="text-start">
+                                    <span t-field="line.product_id.name"/>
+                                </td>
+
+                                <td class="text-end">
+                                    <span t-field="line.product_uom_qty" t-options="{'widget':'integer'}"/>
+                                </td>
+                            </tr>
+                            <t t-set="is_first_line" t-value="False"/>
+                        </t>
+                    </t>
+                </table>
+            </div>
+        </template>
+
+        <template id="return_list_summary_template">
+            <t t-set="product_summary_dict" t-value="dict()"/>
+
+            <t t-foreach="docs" t-as="pick">
+                <t t-foreach="pick.move_ids" t-as="line">
+                    <t t-set="current_qty" t-value="product_summary_dict.get(line.product_id, 0)"/>
+                    <t t-set="dummy"
+                       t-value="product_summary_dict.update({line.product_id: current_qty + line.product_uom_qty})"/>
+                </t>
+            </t>
+            <div class="text-center">
+                <h3>Product Return List Summary</h3>
+            </div>
+
+            <table class="table table-sm table-borderless" style="width:100%;">
+                <thead>
+                    <tr style="border-bottom:2px solid black;">
+                        <th class="text-start">Product</th>
+                        <th class="text-end">Total Return Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="product_summary_dict" t-as="product">
+                        <tr style="border-bottom:1px solid lightgray;">
+                            <td>
+                                <span t-field="product.name"/>
+                            </td>
+                            <td class="text-end">
+                                <span t-esc="product_summary_dict[product]" t-options="{'widget':'integer'}"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+
+            <div class="row">
+                <div class="col-6 text-center">
+                    Delivery Sign
+                </div>
+                <div class="col-6 text-center">
+                    Warehouse Sign
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>
+

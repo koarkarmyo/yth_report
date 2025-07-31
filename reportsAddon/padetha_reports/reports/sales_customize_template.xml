@@ -119,8 +119,9 @@
                         <div class="page">
                             <t t-call="padetha_reports.so_body_template" t-lang="doc.partner_id.lang"/>
                         </div>
-                          <t t-foreach="doc.tag_ids" t-as="tag">
-                            <span style="border:1px solid black;border-radius:5px;background-color:black;color:white;margin:3px;" t-esc="tag.name"/>
+                        <t t-foreach="doc.tag_ids" t-as="tag">
+                            <span style="border:1px solid black;border-radius:5px;background-color:black;color:white;margin:3px;"
+                                  t-esc="tag.name"/>
                         </t>
                         <br/>
                         <br/>
@@ -253,5 +254,6 @@
             </table>
 
         </template>
+
     </data>
 </odoo>
