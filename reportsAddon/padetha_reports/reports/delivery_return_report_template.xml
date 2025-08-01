@@ -16,9 +16,18 @@
         </template>
 
         <template id="return_customer_list_template">
-            <div style="text-align:center;">
-                <h3>Return Customer List</h3>
+            <div class="row">
+                <div class="col-3">
+                    <span style="font-size:14px;">Print Date:
+                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                    </span>
+                </div>
+                <div class="col-6" style="text-align:center;">
+                    <h3>Return Customer List</h3>
+                </div>
+                <div class="col-3"/>
             </div>
+
             <table class="table table-sm o_main_table table-borderless">
                 <thead>
                     <tr style="border-bottom:2px solid black;">
@@ -62,7 +71,7 @@
                                 <!--                                    <span t-esc="pick.sale_id.employee_id.name"/>-->
                             </td>
                             <td class="text-end">
-                                <span t-esc="int(pick.sale_id.amount_total)"/>
+                                <span t-esc="'{:,}'.format(int(pick.sale_id.amount_total))" />
                             </td>
                             <td/>
                         </tr>
@@ -74,7 +83,8 @@
                             <strong>Total Amount :</strong>
                         </td>
                         <td class="text-end">
-                            <span t-esc="total_amount"/>
+                            <span t-esc="'{:,}'.format(total_amount)" />
+
                         </td>
                         <td/>
                     </tr>
@@ -90,7 +100,18 @@
 
             </style>
             <div class="text-center">
-                <h3>Product Return List Detail</h3>
+                 <div class="row">
+                <div class="col-3">
+                    <span style="font-size:14px;">Print Date:
+                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                    </span>
+                </div>
+                <div class="col-6" style="text-align:center;">
+                   <h3>Product Return List Detail</h3>
+                </div>
+                <div class="col-3"/>
+            </div>
+
                 <br/>
 
                 <table class="table table-borderless" style="width:100%;">
@@ -148,8 +169,16 @@
                        t-value="product_summary_dict.update({line.product_id: current_qty + line.product_uom_qty})"/>
                 </t>
             </t>
-            <div class="text-center">
-                <h3>Product Return List Summary</h3>
+            <div class="row">
+                <div class="col-3">
+                    <span style="font-size:14px;">Print Date:
+                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                    </span>
+                </div>
+                <div class="col-6" style="text-align:center;">
+                    <h3>Product Return List Summary</h3>
+                </div>
+                <div class="col-3"/>
             </div>
 
             <table class="table table-sm table-borderless" style="width:100%;">

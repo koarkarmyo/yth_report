@@ -7,12 +7,19 @@
                     <p style="page-break-after: always;"/>
                     <t t-call="padetha_reports.draft_loading_list_template"/>
                     <p style="page-break-after: always;"/>
-                    <div style="text-align:center;">
-                        <h3>Customer Voucher</h3>
-                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <span style="font-size:14px;">Print Date:
+                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                            </span>
+                        </div>
+                        <div class="col-6" style="text-align:center;">
+                            <h3>Customer Voucher</h3>
+                        </div>
+                        <div class="col-3"/>
+                    </div><br/>
+
                     <t t-foreach="docs" t-as="o">
-
-
                         <table style="width:80%" border="0" class="table table-borderless table-sm">
                             <tr>
                                 <td>
@@ -77,11 +84,17 @@
 
         <template id="draft_loading_summary_template">
             <div class="page">
-                <div class="row mt-4 mb-5">
-                    <div class="col-12 text-center">
+                <div class="row">
+                    <div class="col-3">
+                        <span style="font-size:14px;">Print Date:
+                            <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                        </span>
+                    </div>
+                    <div class="col-6" style="text-align:center;">
                         <h2>Draft Delivery Summary</h2>
                     </div>
-                </div>
+                    <div class="col-3"/>
+                </div><br/>
 
 
                 <table style="width: 100%;" class="table table-borderless table-sm">
@@ -98,7 +111,7 @@
                             </td>
                             <td>
                                 <span>:</span>
-                                <span t-esc="entire_total_amount"/>
+                                <span t-esc="'{:,}'.format(entire_total_amount)"/>
                             </td>
                             <td style="width:30%;"/>
                             <td>
@@ -134,7 +147,8 @@
                             </td>
                             <td>
                                 <t t-foreach="docs" t-as="doc">
-                                     <t t-set="sku_count" t-value="doc.get_total_sku_count_for_draft_voucher(docs.mapped('order_line'))"/>
+                                    <t t-set="sku_count"
+                                       t-value="doc.get_total_sku_count_for_draft_voucher(docs.mapped('order_line'))"/>
 
                                 </t>
 
@@ -194,7 +208,7 @@
                                     <!--                                    <span t-esc="o.employee_id.name"/>-->
                                 </td>
                                 <td class="text-end">
-                                    <span t-esc="int(dds.amount_total)"/>
+                                    <span t-esc="'{:,}'.format(int(dds.amount_total))"/>
                                 </td>
                                 <td/>
                             </tr>
@@ -239,9 +253,17 @@
             </t>
             <!--............................-->
             <div class="page">
-                <div style="text-align:center;">
-                    <h3>Draft Loading List</h3>
-                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span style="font-size:14px;">Print Date:
+                            <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                        </span>
+                    </div>
+                    <div class="col-6" style="text-align:center;">
+                        <h3>Draft Loading List</h3>
+                    </div>
+                    <div class="col-3"/>
+                </div><br/>
 
                 <table border="0" class="table table-sm table-borderless o_main_table">
                     <thead>
@@ -287,7 +309,7 @@
                                     <!--                                            <t t-set="ld_qty" t-value="data['product_id']._get_multi_uom_long_form(data['product_uom_qty'])"/>-->
 
                                     <span t-esc="data['product_id'].name"/>
-<!--                                     t-options='{"widget": "integer", "display_currency": docs[0].currency_id}'/>-->
+                                    <!--                                     t-options='{"widget": "integer", "display_currency": docs[0].currency_id}'/>-->
                                 </td>
                                 <td/>
                             </tr>
