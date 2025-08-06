@@ -14,7 +14,7 @@
                             </span>
                         </div>
                         <div class="col-6" style="text-align:center;">
-                            <h3>Customer Voucher</h3>
+                            <h3>Draft Customer Voucher</h3>
                         </div>
                         <div class="col-3"/>
                     </div>
@@ -55,12 +55,13 @@
                                     </td>
                                     <td>
                                         <span t-field="line.product_uom_qty" t-options="{'widget':'integer'}"/>
+                                        <span t-field="line.product_uom.name" groups="uom.group_uom"/>
                                     </td>
                                     <td class="text-end">
                                         <span t-field="line.price_unit" t-options="{'widget':'integer'}"/>
                                     </td>
                                     <td class="text-end">
-                                        <span t-field="line.price_subtotal"/>
+                                        <span t-field="line.price_subtotal" t-options="{'widget':'integer'}"/>
                                     </td>
                                 </tr>
                                 <t t-set="total_amount" t-value="total_amount + line.price_subtotal"/>
@@ -309,9 +310,9 @@
                                 <!--                                                  t-options='{"widget": "monetary", "display_currency": docs[0].currency_id}'/>-->
                                 <!--                                        </td>-->
                                 <td class="text-end">
-                                    <!--                                            <t t-set="ld_qty" t-value="data['product_id']._get_multi_uom_long_form(data['product_uom_qty'])"/>-->
+                                                                                <t t-set="ld_qty" t-value="data['product_id']._get_multi_uom_long_form(data['product_uom_qty'])"/>
 
-                                    <span t-esc="data['product_id'].name"/>
+                                    <span t-esc="ld_qty"/>
                                     <!--                                     t-options='{"widget": "integer", "display_currency": docs[0].currency_id}'/>-->
                                 </td>
                                 <td/>
