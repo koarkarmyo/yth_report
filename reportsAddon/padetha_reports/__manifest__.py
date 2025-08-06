@@ -5,7 +5,7 @@
     'summary': 'Basic structure for QWeb report in Odoo',
     'category': 'Reporting',
     'author': 'YHA',
-    'depends': ['base', 'sale','purchase'],
+    'depends': ['base', 'sale','purchase','report_xlsx','product'],
     'data': [
         'reports/sale_a5_voucher_template.xml',
         'reports/report_action.xml',

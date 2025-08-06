@@ -62,16 +62,16 @@
 
                             </td>
                             <td>
-                                <!--                                    <span t-field="pick.sale_id.partner_id.ward_id"/>-->
+                                <span t-field="pick.sale_id.partner_id.ward_id"/>
                             </td>
                             <td>
-                                <!--                                    <span t-field="pick.sale_id.partner_id.township_id"/>-->
+                                <span t-field="pick.sale_id.partner_id.township_id"/>
                             </td>
                             <td>
-                                <!--                                    <span t-esc="pick.sale_id.employee_id.name"/>-->
+                                <span t-esc="pick.sale_id.employee_id.name"/>
                             </td>
                             <td class="text-end">
-                                <span t-esc="'{:,}'.format(int(pick.sale_id.amount_total))" />
+                                <span t-esc="'{:,}'.format(int(pick.sale_id.amount_total))"/>
                             </td>
                             <td/>
                         </tr>
@@ -83,7 +83,7 @@
                             <strong>Total Amount :</strong>
                         </td>
                         <td class="text-end">
-                            <span t-esc="'{:,}'.format(total_amount)" />
+                            <span t-esc="'{:,}'.format(total_amount)"/>
 
                         </td>
                         <td/>
@@ -93,7 +93,7 @@
         </template>
 
         <template id="product_detail_return_list_template">
-            <style>
+             <style>
                 .tb_header{
                 font-weight:bold;
                 }
@@ -118,8 +118,8 @@
                     <tr style="border-bottom:2px solid black;">
                         <td class="text-end tb_header">No.</td>
                         <td class="text-start tb_header">Customer Name</td>
-                        <td class="text-start tb_header">Source Document</td>
-                        <td class="text-start tb_header">Product</td>
+                        <td class="text-start tb_header" style="width:20%;">Source Document</td>
+                        <td class="text-start tb_header"  style="width:40%;">Product</td>
                         <td class="text-end tb_header">Return Qty</td>
                     </tr>
                     <t t-foreach="docs" t-as="pick">
@@ -149,7 +149,7 @@
                                 </td>
 
                                 <td class="text-end">
-                                    <span t-field="line.product_uom_qty" t-options="{'widget':'integer'}"/>
+                                    <span t-esc="line.product_id._get_multi_uom_long_form(line.product_uom_qty)"/>
                                 </td>
                             </tr>
                             <t t-set="is_first_line" t-value="False"/>
@@ -165,8 +165,7 @@
             <t t-foreach="docs" t-as="pick">
                 <t t-foreach="pick.move_ids" t-as="line">
                     <t t-set="current_qty" t-value="product_summary_dict.get(line.product_id, 0)"/>
-                    <t t-set="dummy"
-                       t-value="product_summary_dict.update({line.product_id: current_qty + line.product_uom_qty})"/>
+                    <t t-set="dummy" t-value="product_summary_dict.update({line.product_id: current_qty + line.product_uom_qty})"/>
                 </t>
             </t>
             <div class="row">
@@ -184,18 +183,27 @@
             <table class="table table-sm table-borderless" style="width:100%;">
                 <thead>
                     <tr style="border-bottom:2px solid black;">
+                        <th class="text-end">No.</th>
                         <th class="text-start">Product</th>
+                        <th class="text-center">UoMC</th>
                         <th class="text-end">Total Return Qty</th>
                     </tr>
                 </thead>
                 <tbody>
                     <t t-foreach="product_summary_dict" t-as="product">
+                        <t t-set="product_index" t-value="product_index + 1"/>
                         <tr style="border-bottom:1px solid lightgray;">
+                            <td class="text-end">
+                                <span t-esc="product_index" />
+                            </td>
                             <td>
                                 <span t-field="product.name"/>
                             </td>
+                            <td class="text-center">
+                                <span t-field="product.uom_category_id.name"/>
+                            </td>
                             <td class="text-end">
-                                <span t-esc="product_summary_dict[product]" t-options="{'widget':'integer'}"/>
+                                <span t-esc="product._get_multi_uom_long_form(product_summary_dict[product])"/>
                             </td>
                         </tr>
                     </t>

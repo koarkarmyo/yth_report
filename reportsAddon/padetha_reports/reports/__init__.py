@@ -5,3 +5,4 @@ from . import sales_order_with_photo
 from . import purchase_order_customize_report
 from . import transfer_report
 from . import delivery_return
+from . import sale_excel_report

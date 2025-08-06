@@ -17,7 +17,8 @@
                             <h3>Customer Voucher</h3>
                         </div>
                         <div class="col-3"/>
-                    </div><br/>
+                    </div>
+                    <br/>
 
                     <t t-foreach="docs" t-as="o">
                         <table style="width:80%" border="0" class="table table-borderless table-sm">
@@ -94,7 +95,8 @@
                         <h2>Draft Delivery Summary</h2>
                     </div>
                     <div class="col-3"/>
-                </div><br/>
+                </div>
+                <br/>
 
 
                 <table style="width: 100%;" class="table table-borderless table-sm">
@@ -199,13 +201,13 @@
 
                                 </td>
                                 <td>
-                                    <!--                                    <span t-field="o.partner_id.ward_id"/>-->
+                                    <span t-field="dds.partner_id.ward_id"/>
                                 </td>
                                 <td>
-                                    <!--                                    <span t-field="o.partner_id.township_id"/>-->
+                                    <span t-field="dds.partner_id.township_id"/>
                                 </td>
                                 <td>
-                                    <!--                                    <span t-esc="o.employee_id.name"/>-->
+                                    <span t-esc="dds.employee_id.name"/>
                                 </td>
                                 <td class="text-end">
                                     <span t-esc="'{:,}'.format(int(dds.amount_total))"/>
@@ -263,7 +265,8 @@
                         <h3>Draft Loading List</h3>
                     </div>
                     <div class="col-3"/>
-                </div><br/>
+                </div>
+                <br/>
 
                 <table border="0" class="table table-sm table-borderless o_main_table">
                     <thead>

@@ -2,23 +2,23 @@
 <odoo>
     <data>
         <template id="transfer_report_template">
-            <style>
-                th{
-                font-weight:bold;
-                }
-
-                .label{
-                font-weight:bold;
-                }
-            </style>
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.basic_layout">
                     <div class="page">
+                        <style>
+                            th{
+                            font-weight:bold;
+                            }
+
+                            .label{
+                            font-weight:bold;
+                            }
+                        </style>
                         <t t-if="o and 'company_id' in o">
-                            <t t-set="company" t-value="o.company_id"></t>
+                            <t t-set="company" t-value="o.company_id"/>
                         </t>
                         <t t-if="not o or not 'company_id' in o">
-                            <t t-set="company" t-value="res_company"></t>
+                            <t t-set="company" t-value="res_company"/>
                         </t>
 
 
@@ -29,48 +29,22 @@
                                 <div>
                                     <span t-field="doc.company_id.name"/>
                                 </div>
-                                <div style="margin-bottom:10px;">
+                                <div>
                                     <span t-if="doc.company_id.street" t-field="doc.company_id.street">,</span>
                                     <span t-if="doc.company_id.city" t-field="doc.company_id.city">,</span>
                                     <br/>
                                     <span t-if="doc.company_id.state_id" t-field="doc.company_id.state_id.name">,
                                     </span>
-                                    <span t-if="doc.company_id.country_id"
-                                          t-field="doc.company_id.country_id.name"/>
+                                    <span t-if="doc.company_id.country_id" t-field="doc.company_id.country_id.name"/>
                                     <br/>
                                     <span t-if="doc.company_id.phone" t-field="doc.company_id.phone">,</span>
                                     <br/>
                                     <span t-if="doc.company_id.email" t-field="doc.company_id.email"/>
 
                                 </div>
-                                <div style="float:left;">
-                                    <div t-if="doc.name" t-field="doc.name"
-                                         t-options="{'widget': 'barcode', 'width': 600, 'height': 120, 'img_style': 'max-height:50pt;max-width:80%;margin-left:-30px;'}"/>
-                                </div>
 
-                            </div>
-                            <div class="col-6">
-                                <table class="table table-sm table-borderless" style="width:100%;">
-                                    <tr style="height:20px;">
-                                        <td class="label">Customer Name</td>
-                                        <td>
-                                            <span t-field="doc.partner_id.name"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="height:20px;">
-                                        <td class="label">Ward,Township</td>
-                                        <td>
-                                            <!--                                    <span t-field="doc.partner_id.ward_id"/>,-->
-                                            <!--                                    <span t-field="doc.partner_id.township_id"/>-->
-                                        </td>
-                                    </tr>
-                                    <tr style="height:20px;">
-                                        <td class="label">Phone Number</td>
-                                        <td>
-                                            <span t-field="doc.partner_id.phone"/>
-                                        </td>
-                                    </tr>
-                                    <tr >
+                                <table class="table table-sm table-borderless" style="width:80%;">
+                                    <tr>
                                         <td class="label">Source Number</td>
                                         <td>
                                             <span t-field="doc.origin"/>
@@ -83,23 +57,56 @@
                                         </td>
                                     </tr>
                                     <tr style="height:20px;">
-                                        <td class="label">Date/Time</td>
-                                        <td>
-                                            <span t-field="doc.date_done"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="height:20px;">
                                         <td class="label">Status</td>
                                         <td>
                                             <span t-field="doc.state"/>
                                         </td>
                                     </tr>
+                                    <t t-if="doc.date_done">
+                                        <tr style="height:20px;">
+                                            <td class="label">Date/Time</td>
+                                            <td>
+                                                <span t-field="doc.date_done"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+
+                                </table>
+
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless" style="width:100%;">
+                                    <tr style="height:20px;">
+                                        <td class="label">Customer Name</td>
+                                        <td>
+                                            <span t-field="doc.partner_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <t t-if="doc.partner_id.ward_id and doc.partner_id.township_id">
+                                        <tr style="height:20px;">
+                                            <td class="label">Ward,Township</td>
+                                            <td>
+                                                <span t-field="doc.partner_id.ward_id"/>,
+                                                <span t-field="doc.partner_id.township_id"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="doc.partner_id.phone">
+                                        <tr style="height:20px;">
+                                            <td class="label">Phone Number</td>
+                                            <td>
+                                                <span t-field="doc.partner_id.phone"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
                                     <tr style="height:20px;">
                                         <td class="label">Source Location</td>
                                         <td>
                                             <span t-field="doc.location_id"/>
                                         </td>
-                                        <td></td>
+                                        <td/>
                                     </tr>
                                     <tr style="height:20px;">
                                         <td class="label">Desitination Location</td>
@@ -107,111 +114,120 @@
                                             <span t-field="doc.location_dest_id"/>
                                         </td>
                                     </tr>
+                                    <tr style="height:20px;"/>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div style="float:left;">
+                                                <div t-if="doc.name" t-field="doc.name"
+                                                     t-options="{'widget': 'barcode', 'width': 600, 'height': 120, 'img_style': 'max-height:50pt;max-width:80%;margin-left:-30px;'}"/>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
 
 
-<!--                        <table class="table table-sm table-borderless" style="width:100%;">-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td style="width:20%;" class="label">Customer Name</td>-->
-<!--                                <td style="width:30%">-->
-<!--                                    <span t-field="doc.partner_id.name"/>-->
-<!--                                </td>-->
-<!--                                <td style="width:20%" class="label">Company Name</td>-->
-<!--                                <td style="width:30%">-->
-<!--                                    <span t-esc="company.name"/>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Ward,Township</td>-->
-<!--                                <td>-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.partner_id.ward_id"/>,&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                    <span t-field="doc.partner_id.township_id"/>&ndash;&gt;-->
-<!--                                </td>-->
-<!--                                <td class="label">Phone</td>-->
-<!--                                <td>-->
-<!--                                    <span t-esc="company.phone"/>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Phone Number</td>-->
-<!--                                <td>-->
-<!--                                    <span t-field="doc.partner_id.phone"/>-->
-<!--                                </td>-->
-<!--                                <td class="label">Address</td>-->
-<!--                                <t t-set="company_address"-->
-<!--                                   t-value="[company.street, company.city, company.state_id.name]"/>-->
-<!--                                &lt;!&ndash;                           t-value="[doc.partner_id.ward_id.name, doc.partner_id.township_id.name, doc.partner_id.city, doc.state_id.name]"/>&ndash;&gt;-->
+                        <!--                        <table class="table table-sm table-borderless" style="width:100%;">-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td style="width:20%;" class="label">Customer Name</td>-->
+                        <!--                                <td style="width:30%">-->
+                        <!--                                    <span t-field="doc.partner_id.name"/>-->
+                        <!--                                </td>-->
+                        <!--                                <td style="width:20%" class="label">Company Name</td>-->
+                        <!--                                <td style="width:30%">-->
+                        <!--                                    <span t-esc="company.name"/>-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Ward,Township</td>-->
+                        <!--                                <td>-->
+                        <!--                                    &lt;!&ndash;                                    <span t-field="doc.partner_id.ward_id"/>,&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                                    <span t-field="doc.partner_id.township_id"/>&ndash;&gt;-->
+                        <!--                                </td>-->
+                        <!--                                <td class="label">Phone</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-esc="company.phone"/>-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Phone Number</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-field="doc.partner_id.phone"/>-->
+                        <!--                                </td>-->
+                        <!--                                <td class="label">Address</td>-->
+                        <!--                                <t t-set="company_address"-->
+                        <!--                                   t-value="[company.street, company.city, company.state_id.name]"/>-->
+                        <!--                                &lt;!&ndash;                           t-value="[doc.partner_id.ward_id.name, doc.partner_id.township_id.name, doc.partner_id.city, doc.state_id.name]"/>&ndash;&gt;-->
 
-<!--                                <t t-set="existing_parts" t-value="[part for part in company_address if part]"/>-->
-<!--                                <t t-foreach="existing_parts" t-as="part">-->
-<!--                                    <td rowspan="3">-->
-<!--                                        <span t-esc="part"/>-->
-<!--                                        <t t-if="not part_last">,</t>-->
-<!--                                    </td>-->
-<!--                                </t>-->
-<!--                                &lt;!&ndash;                                <td rowspan="3">&ndash;&gt;-->
-<!--                                &lt;!&ndash;                                    <span t-if="company.street" t-esc="company.street"/>,&ndash;&gt;-->
-<!--                                &lt;!&ndash;                                    <span t-if="company.city" t-esc="company.city"/>,&ndash;&gt;-->
-<!--                                &lt;!&ndash;                                    <span t-if="company.state_id" t-esc="company.state_id.name"/>&ndash;&gt;-->
-<!--                                &lt;!&ndash;                                </td>&ndash;&gt;-->
+                        <!--                                <t t-set="existing_parts" t-value="[part for part in company_address if part]"/>-->
+                        <!--                                <t t-foreach="existing_parts" t-as="part">-->
+                        <!--                                    <td rowspan="3">-->
+                        <!--                                        <span t-esc="part"/>-->
+                        <!--                                        <t t-if="not part_last">,</t>-->
+                        <!--                                    </td>-->
+                        <!--                                </t>-->
+                        <!--                                &lt;!&ndash;                                <td rowspan="3">&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                    <span t-if="company.street" t-esc="company.street"/>,&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                    <span t-if="company.city" t-esc="company.city"/>,&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                    <span t-if="company.state_id" t-esc="company.state_id.name"/>&ndash;&gt;-->
+                        <!--                                &lt;!&ndash;                                </td>&ndash;&gt;-->
 
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Source Number</td>-->
-<!--                                <td>-->
-<!--                                    <span t-field="doc.origin"/>-->
-<!--                                </td>-->
-<!--                                <td></td>-->
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Do Number</td>-->
-<!--                                <td>-->
-<!--                                    <span t-field="doc.name"/>-->
-<!--                                </td>-->
-<!--                                <td rowspan="4" colspan="2" style="text-align:center;vertical-align:middle;">-->
-<!--                                    <div t-if="doc.name" t-field="doc.name"-->
-<!--                                         t-options="{'widget': 'barcode', 'width': 600, 'height': 120, 'img_style': 'max-height:50pt;max-width:100%;', 'img_align': 'center'}"/>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Date/Time</td>-->
-<!--                                <td>-->
-<!--                                    <span t-field="doc.date_done"/>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Status</td>-->
-<!--                                <td>-->
-<!--                                    <span t-field="doc.state"/>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Source Location</td>-->
-<!--                                <td>-->
-<!--                                    <span t-field="doc.location_id"/>-->
-<!--                                </td>-->
-<!--                                <td></td>-->
-<!--                            </tr>-->
-<!--                            <tr style="height:20px;">-->
-<!--                                <td class="label">Desitination Location</td>-->
-<!--                                <td>-->
-<!--                                    <span t-field="doc.location_dest_id"/>-->
-<!--                                </td>-->
-<!--                                <td></td>-->
-<!--                                <td></td>-->
-<!--                            </tr>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Source Number</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-field="doc.origin"/>-->
+                        <!--                                </td>-->
+                        <!--                                <td></td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Do Number</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-field="doc.name"/>-->
+                        <!--                                </td>-->
+                        <!--                                <td rowspan="4" colspan="2" style="text-align:center;vertical-align:middle;">-->
+                        <!--                                    <div t-if="doc.name" t-field="doc.name"-->
+                        <!--                                         t-options="{'widget': 'barcode', 'width': 600, 'height': 120, 'img_style': 'max-height:50pt;max-width:100%;', 'img_align': 'center'}"/>-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Date/Time</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-field="doc.date_done"/>-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Status</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-field="doc.state"/>-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Source Location</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-field="doc.location_id"/>-->
+                        <!--                                </td>-->
+                        <!--                                <td></td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr style="height:20px;">-->
+                        <!--                                <td class="label">Desitination Location</td>-->
+                        <!--                                <td>-->
+                        <!--                                    <span t-field="doc.location_dest_id"/>-->
+                        <!--                                </td>-->
+                        <!--                                <td></td>-->
+                        <!--                                <td></td>-->
+                        <!--                            </tr>-->
 
 
-<!--                        </table>-->
+                        <!--                        </table>-->
                         <br/>
 
-                        <table class="table table-sm" style="width:100%" border="0">
+                        <table class="table table-sm table-borderless" style="width:100%" border="0">
                             <thead>
                                 <tr style="height:25px;vertical-align:middle;border-bottom:2px solid black;">
                                     <th style="width:34%;vertical-align:middle;">Product</th>
-                                    <th style="width:12%;vertical-align:middle;">Uom Category</th>
+                                    <th style="width:12%;vertical-align:middle;text-align:center;">UoMC</th>
                                     <th style="width:10%;vertical-align:middle;">Quantity</th>
                                     <th style="width:14%;vertical-align:middle;">Quantity Uom</th>
                                     <th style="width:30%;vertical-align:middle;">Remark</th>
@@ -222,8 +238,8 @@
                                 <t t-foreach="doc.move_ids" t-as="line">
                                     <t t-set="qty"
                                        t-value="line.product_uom._compute_quantity(line.product_uom_qty,line.product_id.uom_id)"/>
-                                    <!--                                    <t t-set="forecast_qty"-->
-                                    <!--                                       t-value="line.product_id.convert_to_uom_desc(line.product_id,qty)"/>-->
+                                    <t t-set="forecast_qty"
+                                       t-value="line.product_id.convert_to_uom_desc_for_transfer_report(line.product_id,qty)"/>
                                     <t t-if="line.product_id.categ_id.name != current_category">
                                         <tr style="1px solid lightgray;">
                                             <td colspan="5" style="text-decoration:underline;">
@@ -239,17 +255,16 @@
                                             <t t-esc="line.product_id.name"/>
                                         </td>
                                         <td style="text-align:center;">
-                                            <!--                                            <t t-esc="line.product_id.uom_category_id.name"/>-->
+                                            <t t-esc="line.product_id.uom_category_id.name"/>
                                         </td>
                                         <td style="text-align:center;">
                                             <span t-esc="qty" t-options="{'widget':'integer'}"/>
-                                            <span t-esc="line.product_id.uom_id.name"/>
                                         </td>
                                         <td style="text-align:center;">
-                                            <!--                                            <span t-esc="forecast_qty"/>-->
-                                            sss
+                                            <span t-esc="forecast_qty"/>
+
                                         </td>
-                                        <td></td>
+                                        <td/>
                                     </tr>
                                 </t>
 
@@ -263,30 +278,34 @@
                         <span t-if="doc.purchase_id.notes" style="font-weight:bold;font-size:18px;"
                               t-esc="doc.purchase_id.notes"/>
 
-                        <!--                        <span t-if="doc.sale_id.remark" style="font-weight:bold;font-size:18px;"-->
-                        <!--                              t-esc="doc.sale_id.remark"/>-->
+                        <span t-if="doc.sale_id.remark" style="font-weight:bold;font-size:18px;"
+                              t-esc="doc.sale_id.remark"/>
 
                         <br/>
-                        <div style="width:100%;margin-top:100px;">
-                            <span style="float:left;padding-left:15%;">Supplier Sign</span>
-                            <span style="float:right;padding-right:15%;">Customer Sign</span>
-                        </div>
                         <br/>
                         <br/>
 
-                        <div style="float:right;padding-right:10px;">
-                            <!--                            <span t-esc="datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/>-->
-                            <span>Print Date/Time :</span>
-                            <span t-esc="docs.get_current_datetime_myanmar()"/>
+                        <div class="row">
+                            <div class="col-6 text-center">Supplier Sign</div>
+                            <div class="col-6 text-center">Customer Sign</div>
                         </div>
+
 
                     </div>
                     <div class="footer">
-                        <div class="text-center">
-                            Page
-                            <span class="page"/>
-                            of
-                            <span class="topage"/>
+                        <div class="container">
+                            <div class="row mb-3">
+                                <div class="col-6 text-end">
+                                    <span>Page :</span>
+                                    <span class="page"/>/
+                                    <span class="topage"/>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span>Print Date:
+                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %I:%M %p')"/>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </t>

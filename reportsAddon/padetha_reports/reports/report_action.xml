@@ -28,7 +28,7 @@
             <field name="dpi">90</field>
         </record>
         <record id="address_print_format" model="report.paperformat">
-            <field name="name">Sales Customize Report</field>
+            <field name="name">Address Print Format</field>
             <field name="default" eval="False"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
@@ -37,6 +37,23 @@
             <field name="margin_left">5</field>
             <field name="margin_right">5</field>
             <field name="dpi">90</field>
+        </record>
+
+       <record id="address_print_format_for_slip" model="report.paperformat">
+            <field name="name">Address Print(Slip) Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="page_height">102</field>
+            <field name="page_width">102</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="disable_shrinking" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">203</field>
         </record>
 
         <!--        SO with Photo Paper Format-->
@@ -79,8 +96,7 @@
         </record>
 
 
-
-         <record id="action_delivery_return_report" model="ir.actions.report">
+        <record id="action_delivery_return_report" model="ir.actions.report">
             <field name="name">Delivery Return</field>
             <field name="model">stock.picking</field>
             <field name="report_type">qweb-html</field>
@@ -108,7 +124,7 @@
 
         <!--        Address Print for sale order-->
         <record id="address_print_action" model="ir.actions.report">
-            <field name="name">Address Print</field>
+            <field name="name">Address Print(A4)</field>
             <field name="model">sale.order</field>
             <field name="report_type">qweb-html</field>
             <field name="report_name">padetha_reports.address_print_template</field>
@@ -119,7 +135,20 @@
             <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
         </record>
 
-          <record id="draft_voucher_report_action" model="ir.actions.report">
+         <!--        Address Print(slip) for sale order-->
+        <record id="address_print_action_for_slip" model="ir.actions.report">
+            <field name="name">Address Print(Slip)</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">padetha_reports.address_print_template_for_slip</field>
+            <field name="report_file">padetha_reports.address_print_template_for_slip</field>
+            <field name="print_report_name">'AddressPrint(Slip)'</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.address_print_format_for_slip"/>
+        </record>
+
+        <record id="draft_voucher_report_action" model="ir.actions.report">
             <field name="name">Draft Voucher Report</field>
             <field name="model">sale.order</field>
             <field name="report_type">qweb-html</field>
@@ -137,8 +166,8 @@
             <field name="name">Address Print</field>
             <field name="model">purchase.order</field>
             <field name="report_type">qweb-html</field>
-            <field name="report_name">padetha_reports.address_print_template</field>
-            <field name="report_file">padetha_reports.address_print_template</field>
+            <field name="report_name">padetha_reports.address_print_template_for_po</field>
+            <field name="report_file">padetha_reports.address_print_template_for_po</field>
             <field name="print_report_name">'AddressPrint'</field>
             <field name="binding_model_id" ref="purchase.model_purchase_order"/>
             <field name="binding_type">report</field>
@@ -197,6 +226,66 @@
             <field name="paperformat_id" ref="padetha_reports.sales_customize_format"/>
         </record>
 
+<!--        Sale excel print-->
+        <record id="action_print_sale_orders_excel_controller" model="ir.actions.server">
+            <field name="name">Sales Excel Print</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="state">code</field>
+            <field name="code"><![CDATA[
+context = env.context
+record_ids = context.get('active_ids', [])
+
+if not record_ids and context.get('active_id'):
+    # If there are no active_ids (list view), check for active_id (form view).
+    record_ids = [context.get('active_id')]
+
+if record_ids:
+    # Build the action that calls the URL controller
+    action = {
+        'type': 'ir.actions.act_url',
+        'target': 'self',
+        'url': '/reports/sale_order/excel?model=%s&ids=%s' % (model._name, record_ids),
+    }
+else:
+    # Optional: Raise an error if no records are selected.
+    # This gives feedback to the user instead of doing nothing.
+    raise UserError("Please select at least one record to print the report.")
+]]>
+</field>
+        </record>
+
+<!--        purchase excel print-->
+
+         <record id="action_print_purchase_orders_excel_controller" model="ir.actions.server">
+            <field name="name">Purchase Excel Print</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="state">code</field>
+            <field name="code"><![CDATA[
+context = env.context
+record_ids = context.get('active_ids', [])
+
+if not record_ids and context.get('active_id'):
+    # If there are no active_ids (list view), check for active_id (form view).
+    record_ids = [context.get('active_id')]
+
+if record_ids:
+    # Build the action that calls the URL controller
+    action = {
+        'type': 'ir.actions.act_url',
+        'target': 'self',
+        'url': '/reports/purchase_order/excel?model=%s&ids=%s' % (model._name, record_ids),
+    }
+else:
+    # Optional: Raise an error if no records are selected.
+    # This gives feedback to the user instead of doing nothing.
+    raise UserError("Please select at least one record to print the report.")
+]]>
+</field>
+        </record>
         <!--        Sales Order With Photo-->
         <record id="action_sales_order_with_photo_report" model="ir.actions.report">
             <field name="name">Sales Order With Photo</field>

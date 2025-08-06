@@ -14,6 +14,19 @@
             </t>
         </template>
 
+        <template id="address_print_template_for_po">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="padetha_reports.address_print_detail_template"/>
+                        <hr style="border-bottom:2px dashed black; height:1%;"/>
+                        <br/>
+                        <t t-call="padetha_reports.address_print_detail_template"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
         <template id="address_print_detail_template">
             <div style="height:600px;">
 
@@ -22,9 +35,9 @@
                         <td colspan="3"
                             style="border:3px solid black;text-align:center;vertical-align:middle;font-size:30px;">
                             <span t-if="o.partner_id" t-field="o.partner_id.name"/>
-                            <t t-if="o.partner_id.name2">
-                                (<span style="font-size:25px;" t-field="o.partner_id.name2"/>)
-                            </t>
+                            <!--                                                        <t t-if="o.partner_id.name2">-->
+                            <!--                                                            (<span style="font-size:25px;" t-field="o.partner_id.name2"/>)-->
+                            <!--                                                        </t>-->
 
                             <br/>
                             <t t-if="o.partner_id.street">
@@ -153,5 +166,63 @@
             </div>
         </template>
 
+        <!--        =============================ADDRESS PRINT(SLIP)=======================================-->
+        <template id="address_print_template_for_slip">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="text-center" style="font-weight:bold;font-size:65px;padding-top:50px;">
+                            <span t-if="o.partner_id" t-field="o.partner_id.name"/>
+                            <!--                            <t t-if="o.partner_id.name2">-->
+                            <!--                                (<span style="font-size:25px;" t-field="o.partner_id.name2"/>)-->
+                            <!--                            </t>-->
+
+                            <br/>
+                            <span t-field="o.partner_id.phone"/>
+                            <br/>
+                            <t t-if="o.partner_id.street">
+                                <span t-field="o.partner_id.street"/>
+                                <br/>
+                            </t>
+
+                            <t t-set="address_parts"
+                               t-value="[o.partner_id.city, o.partner_id.state_id.name]"/>
+
+                            <!--                            o.partner_id.ward_id.name,o.partner_id.township_id.name-->
+
+                            <t t-set="existing_parts" t-value="[part for part in address_parts if part]"/>
+                            <t t-if="existing_parts">
+                                <t t-foreach="existing_parts" t-as="part">
+                                    <span t-esc="part"/>
+                                    <t t-if="not part_last">,</t>
+                                </t>
+                                <br/>
+                            </t>
+
+
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-6 text-center" style="font-weight:bold;font-size:55px;padding-top:50px;">
+<!--                                ရေမစိုရ ၊ ပစ်မချရ ၊-->
+                                <br/>
+                                Yay  Ma Soe Ya > Pyit
+                                <br/>
+                                Hey > Yay tat thee
+<!--                                မဖိရ ၊ ကွဲတတ်သည်။-->
+
+                            </div>
+                            <div class="col-6 text-center" style="font-weight:bold;font-size:40px;padding-top:50px;">
+                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                     style="width:400px;" alt="Logo"/>
+                                <div>
+                                    <span t-field="o.company_id.phone"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
     </data>
 </odoo>

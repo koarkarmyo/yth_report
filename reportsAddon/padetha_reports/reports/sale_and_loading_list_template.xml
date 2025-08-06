@@ -133,10 +133,11 @@
                         </t>
 
                         <td>
-                            <strong>Total Volume</strong>
+                           <strong>Total Volume (<span>m<sup>3</sup></span>)</strong>
                         </td>
                         <td>
                             <span>:</span>
+                             <span t-field="o.total_volume" t-options="{'widget':'integer'}"/>
                         </td>
                     </tr>
 
