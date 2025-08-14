@@ -95,7 +95,7 @@ class SaleExcelController(http.Controller):
             summary_sheet.write(row, 1, line.order_id.partner_id.name, cell_format)
             summary_sheet.write(row, 2, line_index, cell_format)
             summary_sheet.write(row, 3, line.product_id.name, cell_format)
-            summary_sheet.write(row, 4, line.product_id.name, cell_format) # line.product_id.uom_category_id.name
+            summary_sheet.write(row, 4, line.product_id.uom_category_id.name, cell_format)
             summary_sheet.write(row, 5, line.product_uom_qty, cell_format)
             summary_sheet.write(row, 6, line.price_unit, cell_format)
             summary_sheet.write(row, 7, line.discount, cell_format)
@@ -158,8 +158,8 @@ class SaleExcelController(http.Controller):
             customer = order.partner_id
 
             address_parts_records = [
-                customer.ward_id,
-                customer.township_id,
+                # customer.ward_id,
+                # customer.township_id,
                 customer.city,
                 customer.state_id,
                 customer.country_id
@@ -179,16 +179,16 @@ class SaleExcelController(http.Controller):
 
             row_before_table = 7
             order_sheet.write(row_before_table, 3, 'Sale Man', bold_format)
-            order_sheet.write(8, 3, order.employee_id,normal_format)
+            order_sheet.write(8, 3, order.employee_id.name,normal_format)
 
             order_sheet.write(row_before_table, 4, 'Delivery Man', bold_format)
-            order_sheet.write(8, 4,order.delivery_man ,normal_format)
+            order_sheet.write(8, 4,order.delivery_man.name ,normal_format)
 
             order_sheet.write(row_before_table, 5, 'Vehicle', bold_format)
-            order_sheet.write_datetime(8, 5, order.delivery_location, normal_format)
+            order_sheet.write_datetime(8, 5, order.delivery_location.name, normal_format)
 
             order_sheet.write(row_before_table, 7, 'Batch', bold_format)
-            order_sheet.write_datetime(8, 7, order.batch_no, normal_format)
+            order_sheet.write_datetime(8, 7, order.batch_no.name, normal_format)
 
             order_sheet.write(row_before_table, 9, 'Order Date', bold_format)
             order_sheet.write_datetime(8, 9, order.date_order, date_format)
