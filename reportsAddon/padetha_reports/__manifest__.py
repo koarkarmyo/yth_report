@@ -20,6 +20,7 @@
         'reports/transfer_report_template.xml',
         'reports/delivery_return_report_template.xml',
         'reports/draft_voucher_report.xml',
+        'reports/po_draft_voucher_report.xml',
     ],
     'installable': True,
     'application': False,

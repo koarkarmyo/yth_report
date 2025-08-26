@@ -160,6 +160,18 @@
             <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
         </record>
 
+        <record id="po_draft_voucher_report_action" model="ir.actions.report">
+            <field name="name">Draft Voucher Report</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">padetha_reports.po_draft_voucher_report_template</field>
+            <field name="report_file">padetha_reports.po_draft_voucher_report_template</field>
+            <field name="print_report_name">'Draft Voucher Report'</field>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="padetha_reports.address_print_format"/>
+        </record>
+
 
         <!--        Address Print for purchase order-->
         <record id="address_print_action_for_po" model="ir.actions.report">
@@ -256,6 +268,36 @@ else:
 </field>
         </record>
 
+        !--        Sale excel Photo print-->
+        <record id="action_print_sale_orders_photo_excel_controller" model="ir.actions.server">
+            <field name="name">Sales Excel With Photo Print</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="state">code</field>
+            <field name="code"><![CDATA[
+context = env.context
+record_ids = context.get('active_ids', [])
+
+if not record_ids and context.get('active_id'):
+    # If there are no active_ids (list view), check for active_id (form view).
+    record_ids = [context.get('active_id')]
+
+if record_ids:
+    # Build the action that calls the URL controller
+    action = {
+        'type': 'ir.actions.act_url',
+        'target': 'self',
+        'url': '/reports/sale_order_photo/excel?model=%s&ids=%s' % (model._name, record_ids),
+    }
+else:
+    # Optional: Raise an error if no records are selected.
+    # This gives feedback to the user instead of doing nothing.
+    raise UserError("Please select at least one record to print the report.")
+]]>
+</field>
+        </record>
+
 <!--        purchase excel print-->
 
          <record id="action_print_purchase_orders_excel_controller" model="ir.actions.server">
@@ -278,6 +320,37 @@ if record_ids:
         'type': 'ir.actions.act_url',
         'target': 'self',
         'url': '/reports/purchase_order/excel?model=%s&ids=%s' % (model._name, record_ids),
+    }
+else:
+    # Optional: Raise an error if no records are selected.
+    # This gives feedback to the user instead of doing nothing.
+    raise UserError("Please select at least one record to print the report.")
+]]>
+</field>
+        </record>
+
+        <!--        purchase excel With Photo print-->
+
+         <record id="action_print_purchase_orders_photo_excel_controller" model="ir.actions.server">
+            <field name="name">Purchase Excel With Photo Print</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_type">report</field>
+            <field name="state">code</field>
+            <field name="code"><![CDATA[
+context = env.context
+record_ids = context.get('active_ids', [])
+
+if not record_ids and context.get('active_id'):
+    # If there are no active_ids (list view), check for active_id (form view).
+    record_ids = [context.get('active_id')]
+
+if record_ids:
+    # Build the action that calls the URL controller
+    action = {
+        'type': 'ir.actions.act_url',
+        'target': 'self',
+        'url': '/reports/purchase_order_photo/excel?model=%s&ids=%s' % (model._name, record_ids),
     }
 else:
     # Optional: Raise an error if no records are selected.
