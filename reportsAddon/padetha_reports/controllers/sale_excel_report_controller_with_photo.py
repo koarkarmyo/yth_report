@@ -236,7 +236,7 @@ class SaleExcelWithPhotoController(http.Controller):
             order_sheet.write(8, 5, order.delivery_location.name, normal_format)
 
             order_sheet.write(row_before_table, 7, 'Batch', bold_format)
-            order_sheet.write_datetime(8, 7, order.batch_no.name, normal_format)
+            order_sheet.write(8, 7, order.batch_no.name, normal_format)
 
             order_sheet.write(row_before_table, 9, 'Order Date', bold_format)
             order_sheet.write_datetime(8, 9, order.date_order, date_format)
