@@ -95,7 +95,7 @@ class SaleExcelController(http.Controller):
             summary_sheet.write(row, 1, line.order_id.partner_id.name, cell_format)
             summary_sheet.write(row, 2, line_index, cell_format)
             summary_sheet.write(row, 3, line.product_id.name, cell_format)
-            summary_sheet.write(row, 4, line.product_id.uom_category_id.name, cell_format)
+            summary_sheet.write(row, 4, line.product_id.uom_category_id.name , cell_format)
             summary_sheet.write(row, 5, line.product_uom_qty, cell_format)
             summary_sheet.write(row, 6, line.price_unit, cell_format)
             summary_sheet.write(row, 7, line.discount, cell_format)
@@ -185,7 +185,7 @@ class SaleExcelController(http.Controller):
             order_sheet.write(8, 4,order.delivery_man.name ,normal_format)
 
             order_sheet.write(row_before_table, 5, 'Vehicle', bold_format)
-            order_sheet.write_datetime(8, 5, order.delivery_location.name, normal_format)
+            order_sheet.write(8, 5, order.delivery_location.name, normal_format)
 
             order_sheet.write(row_before_table, 7, 'Batch', bold_format)
             order_sheet.write_datetime(8, 7, order.batch_no.name, normal_format)
@@ -209,7 +209,7 @@ class SaleExcelController(http.Controller):
                 order_sheet.write(line_row_num, 1, order.partner_id.name, cell_format)
                 order_sheet.write(line_row_num, 2, line_no, cell_format)
                 order_sheet.write(line_row_num, 3, line.product_id.name, cell_format)
-                order_sheet.write(line_row_num, 4, line.uom_category_id.name, cell_format)
+                order_sheet.write(line_row_num, 4, line.uom_category_id.name , cell_format)
                 order_sheet.write(line_row_num, 5, line.product_uom_qty, cell_format)
                 order_sheet.write(line_row_num, 6, line.price_unit, cell_format)
                 order_sheet.write(line_row_num, 7, line.discount, cell_format)
