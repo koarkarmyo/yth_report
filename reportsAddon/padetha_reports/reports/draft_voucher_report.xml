@@ -105,9 +105,29 @@
                         <tr style="height:12px;">
                             <t t-set="entire_total_amount" t-value="0"/>
                             <t t-set="voucher_count" t-value="0"/>
+                            <t t-set="entire_total_weight" t-value="0"/>
+                            <t t-set="entire_total_volume" t-value="0"/>
                             <t t-foreach="docs" t-as="dds">
                                 <t t-set="entire_total_amount" t-value="entire_total_amount + int(dds.amount_total)"/>
                                 <t t-set="voucher_count" t-value="voucher_count + 1"/>
+
+
+                                <t t-foreach="docs" t-as="dds">
+                                    <t t-set="entire_total_amount"
+                                       t-value="entire_total_amount + int(dds.amount_total)"/>
+                                    <t t-set="voucher_count" t-value="voucher_count + 1"/>
+                                    <t t-foreach="dds.order_line" t-as="line">
+
+                                        <t t-set="converted_qty"
+                                           t-value="line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.weight_uom_id)"/>
+
+
+                                        <t t-set="entire_total_weight"
+                                           t-value="entire_total_weight + (converted_qty * line.product_id.weight)"/>
+                                        <t t-set="entire_total_volume"
+                                           t-value="entire_total_volume + (converted_qty * line.product_id.volume)"/>
+                                    </t>
+                                </t>
                             </t>
                             <td style="width: 20%;">
                                 <strong>Total Amount</strong>
@@ -121,7 +141,7 @@
                                 <strong>Total Weight (Kg) :</strong>
                             </td>
                             <td>
-                                <span></span>
+                                <span t-esc="entire_total_weight"/>
                                 <!--                            <span t-field="o.total_weight" t-options="{'widget':'integer'}"/>-->
                             </td>
                         </tr>
@@ -139,7 +159,7 @@
                                 <strong>Total Volume :</strong>
                             </td>
                             <td>
-
+                                <span t-esc="entire_total_volume"/>
                             </td>
 
                         </tr>
@@ -237,21 +257,28 @@
                 <t t-if="line.product_id and not line.display_type">
                     <t t-set="product_id" t-value="line.product_id.id"/>
                     <t t-set="current_totals"
-                       t-value="product_totals.get(product_id, {'product_uom_qty': 0, 'price_unit': 0, 'price_subtotal': 0, 'name': line.product_id.name})"/>
+                       t-value="product_totals.get(product_id, {'product_uom_qty': 0, 'price_subtotal': 0, 'loading_qty': 0, 'name': line.product_id.name, 'product_uom': line.product_uom.name})"/>
 
+                    <!-- Calculate loading quantity for the current line -->
+                    <t t-set="line_loading_qty"
+                       t-value="line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)"/>
+
+                    <!-- Add to the running totals -->
                     <t t-set="new_quantity" t-value="current_totals['product_uom_qty'] + line.product_uom_qty"/>
-                    <!--        <t t-set="new_price_unit" t-value="current_totals['price_unit'] + line.price_unit"/>-->
-                    <t t-set="new_price_subtotal"
-                       t-value="current_totals['price_subtotal'] + line.price_subtotal"/>
-                    <t t-set="dummy" t-value="product_totals.update({
-            product_id: {
-                'product_id':line.product_id,
-                'name': current_totals['name'],
-                'product_uom_qty': new_quantity,
-                'price_subtotal': new_price_subtotal
-            }
-        })"/>
+                    <t t-set="new_price_subtotal" t-value="current_totals['price_subtotal'] + line.price_subtotal"/>
+                    <t t-set="new_loading_qty" t-value="current_totals['loading_qty'] + line_loading_qty"/>
 
+                    <!-- Update the dictionary with all aggregated values -->
+                    <t t-set="dummy" t-value="product_totals.update({
+                product_id: {
+                    'product_id': line.product_id,
+                    'name': current_totals['name'],
+                    'product_uom': current_totals['product_uom'],
+                    'product_uom_qty': new_quantity,
+                    'price_subtotal': new_price_subtotal,
+                    'loading_qty': new_loading_qty
+                }
+            })"/>
                 </t>
             </t>
             <!--............................-->
@@ -281,7 +308,6 @@
                             <th name="th_quantity" class="text-end">
                                 <strong>Quantity</strong>
                             </th>
-                            <!--                <th name="th_price_unit" class="text-right"><strong>Sum of Unit Price</strong></th>-->
                             <th name="th_price_subtotal" class="text-end">
                                 <strong>Loading Quantity</strong>
                             </th>
@@ -291,10 +317,9 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        <t t-set="data_index" t-value="0"/>
                         <t t-foreach="list(product_totals.values())" t-as="data">
                             <t t-set="data_index" t-value="data_index + 1"/>
-
                             <tr style="border-bottom:1px solid lightgray;">
                                 <td>
                                     <span t-esc="data_index"/>
@@ -305,22 +330,16 @@
                                 <td class="text-end">
                                     <span t-esc="data['product_uom_qty']" t-options="{'widget':'integer'}"/>
                                 </td>
-                                <!--                                        <td class="text-right">-->
-                                <!--                                            <span t-esc="data['price_unit']"-->
-                                <!--                                                  t-options='{"widget": "monetary", "display_currency": docs[0].currency_id}'/>-->
-                                <!--                                        </td>-->
                                 <td class="text-end">
-                                                                                <t t-set="ld_qty" t-value="data['product_id']._get_multi_uom_long_form(data['product_uom_qty'])"/>
-
+                                    <t t-set="ld_qty"
+                                       t-value="data['product_id']._get_multi_uom_long_form(data['loading_qty'])"/>
                                     <span t-esc="ld_qty"/>
-                                    <!--                                     t-options='{"widget": "integer", "display_currency": docs[0].currency_id}'/>-->
                                 </td>
                                 <td/>
                             </tr>
                         </t>
                     </tbody>
                 </table>
-
             </div>
         </template>
     </data>
