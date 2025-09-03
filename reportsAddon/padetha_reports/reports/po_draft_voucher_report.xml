@@ -110,7 +110,7 @@
                             <t t-foreach="docs" t-as="dds">
                                 <t t-set="entire_total_amount" t-value="entire_total_amount + int(dds.amount_total)"/>
                                 <t t-set="voucher_count" t-value="voucher_count + 1"/>
-                                                                <t t-foreach="docs" t-as="dds">
+                                <t t-foreach="docs" t-as="dds">
                                     <t t-set="entire_total_amount"
                                        t-value="entire_total_amount + int(dds.amount_total)"/>
                                     <t t-set="voucher_count" t-value="voucher_count + 1"/>
@@ -140,7 +140,7 @@
                                 <strong>Total Weight (Kg) :</strong>
                             </td>
                             <td>
-                                <span></span>
+                                <span t-esc="entire_total_weight"/>
                                 <!--                            <span t-field="o.total_weight" t-options="{'widget':'integer'}"/>-->
                             </td>
                         </tr>
@@ -158,7 +158,7 @@
                                 <strong>Total Volume :</strong>
                             </td>
                             <td>
-
+                                <span t-esc="entire_total_volume"/>
                             </td>
 
                         </tr>
