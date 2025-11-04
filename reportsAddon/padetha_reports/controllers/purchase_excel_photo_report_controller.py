@@ -131,7 +131,7 @@ class PurchaseExcelPhotoController(http.Controller):
             summary_sheet.write(row, 2, line.order_id.partner_id.name, cell_format)
             summary_sheet.write(row, 3, line_index, cell_format)
             summary_sheet.write(row, 4, line.name, cell_format)  # Use line description
-            summary_sheet.write(row, 5,line.name , cell_format)#line.uom_category_id.name
+            summary_sheet.write(row, 5,line.product_uom.name , cell_format)#line.uom_category_id.name
             summary_sheet.write(row, 6, line.product_qty, cell_format)
             summary_sheet.write(row, 7, line.price_unit, cell_format)
             # Combine tax names
@@ -251,7 +251,7 @@ class PurchaseExcelPhotoController(http.Controller):
                 order_sheet.write(line_row_num, 2, order.partner_id.name, cell_format)
                 order_sheet.write(line_row_num, 3, line_no, cell_format)
                 order_sheet.write(line_row_num, 4, line.product_id.name, cell_format)
-                order_sheet.write(line_row_num, 5, line.product_id.name, cell_format)#line.uom_category_id.name
+                order_sheet.write(line_row_num, 5, line.product_uom.name, cell_format)#line.uom_category_id.name
                 order_sheet.write(line_row_num, 6, line.product_qty, cell_format)
                 order_sheet.write(line_row_num, 7, line.price_unit, cell_format)
                 tax_names = ', '.join(t.name for t in line.taxes_id)

@@ -143,7 +143,7 @@ class SaleExcelWithPhotoController(http.Controller):
                     }
                 )
             summary_sheet.write(row, 4, line.product_id.name, cell_format)
-            summary_sheet.write(row, 5, line.product_id.uom_category_id.name, cell_format)
+            summary_sheet.write(row, 5, line.product_uom.name, cell_format)
             summary_sheet.write(row, 6, line.product_uom_qty, cell_format)
             summary_sheet.write(row, 7, line.price_unit, cell_format)
             summary_sheet.write(row, 8, line.discount, cell_format)
@@ -297,7 +297,7 @@ class SaleExcelWithPhotoController(http.Controller):
                         }
                     )
                 order_sheet.write(line_row_num, 4, line.product_id.name, cell_format)
-                order_sheet.write(line_row_num, 5, line.uom_category_id.name, cell_format)
+                order_sheet.write(line_row_num, 5, line.product_uom.name, cell_format)
                 order_sheet.write(line_row_num, 6, line.product_uom_qty, cell_format)
                 order_sheet.write(line_row_num, 7, line.price_unit, cell_format)
                 order_sheet.write(line_row_num, 8, line.discount, cell_format)
