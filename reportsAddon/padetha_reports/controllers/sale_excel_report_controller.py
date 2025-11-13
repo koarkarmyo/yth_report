@@ -72,19 +72,24 @@ class SaleExcelController(http.Controller):
         summary_sheet = workbook.add_worksheet('Summary')
 
         # Set column widths
-        summary_sheet.set_column('A:A', 15)
-        summary_sheet.set_column('B:B', 30)
-        summary_sheet.set_column('D:D', 15)
-        summary_sheet.set_column('E:E', 15)
-        summary_sheet.set_column('I:I', 15)
-        summary_sheet.set_column('J:J', 18)
+        summary_sheet.set_column('A:A', 15)  # Order Number
+        summary_sheet.set_column('B:B', 30)  # Customer
+        summary_sheet.set_column('C:C', 8)  # No
+        summary_sheet.set_column('D:D', 35)  # Product
+        summary_sheet.set_column('E:E', 15)  # UoMC
+        summary_sheet.set_column('F:F', 10)  # Qty
+        summary_sheet.set_column('G:G', 12)  # UOM
+        summary_sheet.set_column('H:H', 15)  # Unit Price
+        summary_sheet.set_column('I:I', 10)  # Dis%
+        summary_sheet.set_column('J:J', 18)  # Subtotal
+        summary_sheet.set_column('K:K', 25)  # Available Qty
 
         myanmar_tz = timezone('Asia/Yangon')
         now = datetime.now(myanmar_tz).replace(tzinfo=None)
-        summary_sheet.write('I1', 'Date & Time', bold_format)
-        summary_sheet.write_datetime('J1', now, date_format)
+        summary_sheet.write('J1', 'Date & Time', bold_format)
+        summary_sheet.write_datetime('K1', now, date_format)
 
-        summary_headers = ['Order Number', 'Customer', 'No', 'Description','UoMC','Qty','Unit Price', 'Dis%', 'Subtotal','Available Qty']
+        summary_headers = ['Order Number', 'Customer Name', 'No', 'Product','UoMC','Qty','UOM','Unit Price', 'Dis%', 'Subtotal','Available Qty']
         for col, header in enumerate(summary_headers):
             summary_sheet.write(1, col, header, header_format)
 
@@ -95,17 +100,18 @@ class SaleExcelController(http.Controller):
             summary_sheet.write(row, 1, line.order_id.partner_id.name, cell_format)
             summary_sheet.write(row, 2, line_index, cell_format)
             summary_sheet.write(row, 3, line.product_id.name, cell_format)
-            summary_sheet.write(row, 4, line.product_uom.name , cell_format)
+            summary_sheet.write(row, 4, line.uom_category_id.name , cell_format)
             summary_sheet.write(row, 5, line.product_uom_qty, cell_format)
-            summary_sheet.write(row, 6, line.price_unit, cell_format)
-            summary_sheet.write(row, 7, line.discount, cell_format)
-            summary_sheet.write(row, 8, line.price_subtotal, cell_format)
+            summary_sheet.write(row, 6, line.product_uom.name, cell_format)
+            summary_sheet.write(row, 7, line.price_unit, cell_format)
+            summary_sheet.write(row, 8, line.discount, cell_format)
+            summary_sheet.write(row, 9, line.price_subtotal, cell_format)
             product_in_total_context = line.product_id.with_context(warehouse=None)
             total_qty = product_in_total_context.virtual_available
 
             multi_uom_string = self._get_multi_uom_string(line.product_id, total_qty, request.env)
 
-            summary_sheet.write(row, 9, multi_uom_string, cell_format)
+            summary_sheet.write(row, 10, multi_uom_string, cell_format)
             line_index += 1
             row += 1
 
@@ -116,13 +122,17 @@ class SaleExcelController(http.Controller):
             order_sheet = workbook.add_worksheet(order.name)
 
             # --- Set column widths ---
-            order_sheet.set_column('A:B', 25)
-            order_sheet.set_column('C:C', 5)
-            order_sheet.set_column('D:D', 35)
-            order_sheet.set_column('E:F', 15)
-            order_sheet.set_column('G:H', 12)
-            order_sheet.set_column('I:J', 18)
-            order_sheet.set_column('H:H', 19)
+            order_sheet.set_column('A:A', 15)  # Order Number
+            order_sheet.set_column('B:B', 30)  # Customer
+            order_sheet.set_column('C:C', 8)  # No
+            order_sheet.set_column('D:D', 35)  # Product
+            order_sheet.set_column('E:E', 15)  # UoMC
+            order_sheet.set_column('F:F', 10)  # Qty
+            order_sheet.set_column('G:G', 12)  # UOM
+            order_sheet.set_column('H:H', 15)  # Unit Price
+            order_sheet.set_column('I:I', 10)  # Dis%
+            order_sheet.set_column('J:J', 18)  # Subtotal
+            order_sheet.set_column('K:K', 25)  # Available Qty
 
             order_sheet.set_row(0, 60)
             order_sheet.set_row(1, 20)
@@ -197,7 +207,7 @@ class SaleExcelController(http.Controller):
             table_header_row = 9
             order_headers = [
                 'SO Number', 'Customer Name', 'No.', 'Product', 'UoMC',
-                'Qty', 'Unit Price', 'Dis%', 'Sub Total', 'Available Qty'
+                'Qty','UOM', 'Unit Price', 'Dis%', 'Sub Total', 'Available Qty'
             ]
             for col, header in enumerate(order_headers):
                 order_sheet.write(table_header_row, col, header, header_format)
@@ -209,11 +219,12 @@ class SaleExcelController(http.Controller):
                 order_sheet.write(line_row_num, 1, order.partner_id.name, cell_format)
                 order_sheet.write(line_row_num, 2, line_no, cell_format)
                 order_sheet.write(line_row_num, 3, line.product_id.name, cell_format)
-                order_sheet.write(line_row_num, 4, line.product_uom.name , cell_format)
+                order_sheet.write(line_row_num, 4, line.uom_category_id.name , cell_format)
                 order_sheet.write(line_row_num, 5, line.product_uom_qty, cell_format)
-                order_sheet.write(line_row_num, 6, line.price_unit, cell_format)
-                order_sheet.write(line_row_num, 7, line.discount, cell_format)
-                order_sheet.write(line_row_num, 8, line.price_subtotal, cell_format)
+                order_sheet.write(line_row_num, 6, line.product_uom.name, cell_format)
+                order_sheet.write(line_row_num, 7, line.price_unit, cell_format)
+                order_sheet.write(line_row_num, 8, line.discount, cell_format)
+                order_sheet.write(line_row_num, 9, line.price_subtotal, cell_format)
 
                 # Calculate Multi UoM
 
@@ -222,7 +233,7 @@ class SaleExcelController(http.Controller):
 
                 multi_uom_string = self._get_multi_uom_string(line.product_id, total_qty, request.env)
 
-                order_sheet.write(line_row_num, 9, multi_uom_string, cell_format)
+                order_sheet.write(line_row_num, 10, multi_uom_string, cell_format)
 
                 line_row_num += 1
                 line_no += 1

@@ -65,17 +65,21 @@ class PurchaseExcelController(http.Controller):
         summary_sheet.set_column('A:A', 20)  # PO Number
         summary_sheet.set_column('B:B', 30)  # Supplier
         summary_sheet.set_column('C:C', 5)  # No
-        summary_sheet.set_column('D:D', 35)  # Product Description
-        summary_sheet.set_column('E:F', 15)  # UoM, Qty
-        summary_sheet.set_column('G:I', 15)  # Prices, Subtotal
-        summary_sheet.set_column('J:J', 25)  # Available Qty
+        summary_sheet.set_column('D:D', 35)  # Product
+        summary_sheet.set_column('E:E', 15)  # UoMC (Category)
+        summary_sheet.set_column('F:F', 10)  # Qty
+        summary_sheet.set_column('G:G', 12)  # UOM
+        summary_sheet.set_column('H:H', 15)  # Unit Price
+        summary_sheet.set_column('I:I', 12)  # Tax
+        summary_sheet.set_column('J:J', 18)  # Sub Total
+        summary_sheet.set_column('K:K', 25)  # Available Qty
 
         myanmar_tz = timezone('Asia/Yangon')
         now = datetime.now(myanmar_tz).replace(tzinfo=None)
-        summary_sheet.write('I1', 'Date & Time', bold_format)
-        summary_sheet.write_datetime('J1', now, date_format)
+        summary_sheet.write('J1', 'Date & Time', bold_format)
+        summary_sheet.write_datetime('K1', now, date_format)
 
-        summary_headers = ['PO Number', 'Supplier', 'No.', 'Product', 'UoMC', 'Qty', 'Unit Price', 'Taxes', 'Subtotal',
+        summary_headers = ['PO Number', 'Supplier Name', 'No.', 'Product', 'UoMC', 'Qty','UOM', 'Unit Price', 'Taxes', 'Subtotal',
                            'Total Available Qty']
         for col, header in enumerate(summary_headers):
             summary_sheet.write(1, col, header, header_format)
@@ -87,20 +91,21 @@ class PurchaseExcelController(http.Controller):
             summary_sheet.write(row, 0, line.order_id.name, cell_format)
             summary_sheet.write(row, 1, line.order_id.partner_id.name, cell_format)
             summary_sheet.write(row, 2, line_index, cell_format)
-            summary_sheet.write(row, 3, line.name, cell_format)  # Use line description
-            summary_sheet.write(row, 4, line.product_uom.name, cell_format)
+            summary_sheet.write(row, 3, line.name, cell_format)
+            summary_sheet.write(row, 4, line.uom_category_id.name, cell_format)
             summary_sheet.write(row, 5, line.product_qty, cell_format)
-            summary_sheet.write(row, 6, line.price_unit, cell_format)
+            summary_sheet.write(row, 6, line.product_uom.name, cell_format)
+            summary_sheet.write(row, 7, line.price_unit, cell_format)
             # Combine tax names
             tax_names = ', '.join(t.name for t in line.taxes_id)
-            summary_sheet.write(row, 7, tax_names, cell_format)
-            summary_sheet.write(row, 8, line.price_subtotal, cell_format)
+            summary_sheet.write(row, 8, tax_names, cell_format)
+            summary_sheet.write(row, 9, line.price_subtotal, cell_format)
 
             # Calculate total available stock for the product
             product_in_total_context = line.product_id.with_context(warehouse=None)
             total_qty = product_in_total_context.virtual_available
             multi_uom_string = self._get_multi_uom_string(line.product_id, total_qty, request.env)
-            summary_sheet.write(row, 9, multi_uom_string, cell_format)
+            summary_sheet.write(row, 10, multi_uom_string, cell_format)
 
             line_index += 1
             row += 1
@@ -110,12 +115,17 @@ class PurchaseExcelController(http.Controller):
         # =================================================================
         for order in purchase_orders:
             order_sheet = workbook.add_worksheet(order.name)
-            order_sheet.set_column('A:B', 25)
-            order_sheet.set_column('C:C', 5)
-            order_sheet.set_column('D:D', 35)
-            order_sheet.set_column('E:F', 15)
-            order_sheet.set_column('G:H', 12)
-            order_sheet.set_column('I:J', 18)
+            order_sheet.set_column('A:A', 20)  # PO Number
+            order_sheet.set_column('B:B', 30)  # Supplier
+            order_sheet.set_column('C:C', 5)  # No
+            order_sheet.set_column('D:D', 35)  # Product
+            order_sheet.set_column('E:E', 15)  # UoMC (Category)
+            order_sheet.set_column('F:F', 10)  # Qty
+            order_sheet.set_column('G:G', 12)  # UOM
+            order_sheet.set_column('H:H', 15)  # Unit Price
+            order_sheet.set_column('I:I', 12)  # Tax
+            order_sheet.set_column('J:J', 18)  # Sub Total
+            order_sheet.set_column('K:K', 25)  # Available Qty
             order_sheet.set_row(0, 60)
             order_sheet.set_row(1, 20)
             order_sheet.set_row(2, 15)
@@ -156,7 +166,7 @@ class PurchaseExcelController(http.Controller):
             table_header_row = 9
             order_headers = [
                 'PO Number', 'Supplier Name', 'No.', 'Product', 'UoMC',
-                'Qty', 'Unit Price', 'Tax', 'Sub Total', 'Available Qty'
+                'Qty','UOM', 'Unit Price', 'Tax', 'Sub Total', 'Available Qty'
             ]
             for col, header in enumerate(order_headers):
                 order_sheet.write(table_header_row, col, header, header_format)
@@ -168,18 +178,19 @@ class PurchaseExcelController(http.Controller):
                 order_sheet.write(line_row_num, 1, order.partner_id.name, cell_format)
                 order_sheet.write(line_row_num, 2, line_no, cell_format)
                 order_sheet.write(line_row_num, 3, line.product_id.name, cell_format)
-                order_sheet.write(line_row_num, 4, line.product_uom.name, cell_format)
+                order_sheet.write(line_row_num, 4, line.uom_category_id.name, cell_format)
                 order_sheet.write(line_row_num, 5, line.product_qty, cell_format)
-                order_sheet.write(line_row_num, 6, line.price_unit, cell_format)
+                order_sheet.write(line_row_num, 6, line.product_uom.name, cell_format)
+                order_sheet.write(line_row_num, 7, line.price_unit, cell_format)
                 tax_names = ', '.join(t.name for t in line.taxes_id)
-                order_sheet.write(line_row_num, 7, tax_names, cell_format)
-                order_sheet.write(line_row_num, 8, line.price_subtotal, cell_format)
+                order_sheet.write(line_row_num, 8, tax_names, cell_format)
+                order_sheet.write(line_row_num, 9, line.price_subtotal, cell_format)
 
                 # Calculate total available stock for the product
                 product_in_total_context = line.product_id.with_context(warehouse=None)
                 total_qty = product_in_total_context.virtual_available
                 multi_uom_string = self._get_multi_uom_string(line.product_id, total_qty, request.env)
-                order_sheet.write(line_row_num, 9, multi_uom_string, cell_format)
+                order_sheet.write(line_row_num, 10, multi_uom_string, cell_format)
 
                 line_row_num += 1
                 line_no += 1
